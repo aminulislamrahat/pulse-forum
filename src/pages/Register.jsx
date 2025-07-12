@@ -1,10 +1,12 @@
 import React, { useContext, useState } from 'react';
-
+import { useForm } from "react-hook-form";
 import Swal from 'sweetalert2';
 import { AuthContext } from '../provider/AuthProvider';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { Link, useNavigate } from 'react-router';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import useAxiosPublic from '../api/useAxiosPublic';
+import { uploadToCloudinary } from '../api/cloudinaryAPI';
 
 
 export const Register = () => {
@@ -12,60 +14,64 @@ export const Register = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [imagePreview, setImagePreview] = useState("");
+    const [uploading, setUploading] = useState(false);
+    const axiosPublic = useAxiosPublic();
 
-    const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    const validatePassword = (password) =>
-        /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(password);
+    // useForm
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        formState: { errors, isValid },
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
+    } = useForm();
 
-        const form = e.target;
-        const name = form.name.value.trim();
-        const photo = form.photo.value.trim();
-        const email = form.email.value.trim();
-        const password = form.password.value.trim();
-
-        // Validations
-        if (!name || !photo || !email || !password) {
-            Swal.fire('Wait', 'All fields are required.', 'warning');
-            setLoading(false);
-            return;
+    // Cloudinary image upload handler
+    const handleImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        setUploading(true);
+        try {
+            const url = await uploadToCloudinary(file);
+            setValue("photo", url);
+            setImagePreview(url);
+        } catch {
+            Swal.fire('Error', 'Image upload failed', 'error');
+        } finally {
+            setUploading(false);
         }
+    };
+
+    // Sync user to DB
+    const syncUserToDB = async (firebaseUser, name, photo) => {
+        await axiosPublic.post('/users', {
+            email: firebaseUser.email,
+            name: name || firebaseUser.displayName,
+            photo: photo || firebaseUser.photoURL,
+        });
+    };
+
+    // Form submit
+    const onSubmit = async (data) => {
+        setLoading(true);
+        const { name, photo, email, password } = data;
 
         if (name.length < 5) {
             Swal.fire('Wait', 'Name must be at least 5 characters long.', 'warning');
             setLoading(false);
             return;
         }
-
-        if (!validateEmail(email)) {
-            Swal.fire('Invalid Email', 'Please enter a valid email address.', 'warning');
-            setLoading(false);
-            return;
-        }
-
-        if (!validatePassword(password)) {
-            Swal.fire(
-                'Weak Password',
-                'Password must contain at least 6 characters, 1 uppercase, and 1 lowercase letter.',
-                'warning'
-            );
-            setLoading(false);
-            return;
-        }
-
         try {
             const userCredential = await createUser(email, password);
             await updateUser({ displayName: name, photoURL: photo });
             const currentUser = userCredential.user;
             setUser({ ...currentUser, displayName: name, photoURL: photo });
+            await syncUserToDB(currentUser, name, photo);
 
             Swal.fire('Success', 'Registration complete!', 'success');
             navigate('/');
         } catch (error) {
-            console.error(error);
             Swal.fire('Registration Failed', error.message, 'error');
         } finally {
             setLoading(false);
@@ -75,11 +81,11 @@ export const Register = () => {
     const handleGoogleLogin = async () => {
         setLoading(true);
         try {
-            await signInWithGoogle();
+            const result = await signInWithGoogle();
+            await syncUserToDB(result.user);
             Swal.fire('Success', 'Logged in with Google!', 'success');
             navigate('/');
         } catch (error) {
-            console.error(error);
             Swal.fire('Login Failed', error.message, 'error');
         } finally {
             setLoading(false);
@@ -95,26 +101,54 @@ export const Register = () => {
                 <h1 className="my-3 text-4xl font-bold">Register Now</h1>
                 <p className="text-sm text-gray-600">Register to create a new account</p>
             </div>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="space-y-4">
                     <div>
                         <label className="block mb-2 text-sm">Name</label>
-                        <input type="text" name="name" id="name" placeholder="Your name" className="input input-bordered w-full" />
+                        <input
+                            type="text"
+                            {...register("name", { required: true, minLength: 5 })}
+                            placeholder="Your name"
+                            className="input input-bordered w-full"
+                        />
+                        {errors.name && <span className="text-red-500 text-xs">Name is required (min 5 chars)</span>}
                     </div>
                     <div>
                         <label className="block mb-2 text-sm">Profile Picture</label>
-                        <input type="text" name="photo" id="photo" placeholder="Profile picture URL" className="input input-bordered w-full" />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            className="file-input file-input-bordered w-full"
+                            required
+                        />
+                        {uploading && <span className="text-blue-500 text-xs">Uploading...</span>}
+                        {imagePreview && (
+                            <img src={imagePreview} alt="Preview" className="h-32 mt-2 rounded mx-auto" />
+                        )}
+                        {/* Hidden field for image URL */}
+                        <input type="hidden" {...register("photo", { required: true })} />
+                        {errors.photo && <span className="text-red-500 text-xs">Profile picture is required</span>}
                     </div>
                     <div>
                         <label className="block mb-2 text-sm">Email Address</label>
-                        <input type="email" name="email" id="email" placeholder="you@example.com" className="input input-bordered w-full" />
+                        <input
+                            type="email"
+                            {...register("email", { required: true })}
+                            placeholder="you@example.com"
+                            className="input input-bordered w-full"
+                        />
+                        {errors.email && <span className="text-red-500 text-xs">Email is required</span>}
                     </div>
                     <div className="relative">
                         <label className="block mb-2 text-sm">Password</label>
                         <input
                             type={showPassword ? 'text' : 'password'}
-                            name="password"
-                            id="password"
+                            {...register("password", {
+                                required: true,
+                                minLength: 6,
+                                validate: (v) => /[A-Z]/.test(v) && /[a-z]/.test(v),
+                            })}
                             placeholder="******"
                             className="input input-bordered w-full pr-10"
                         />
@@ -124,10 +158,15 @@ export const Register = () => {
                         >
                             {showPassword ? <FaEyeSlash /> : <FaEye />}
                         </span>
+                        {errors.password && (
+                            <span className="text-red-500 text-xs">
+                                Password must be 6+ chars, have 1 uppercase and 1 lowercase letter
+                            </span>
+                        )}
                     </div>
                 </div>
                 <div className="space-y-2">
-                    <button type="submit" className="btn btn-primary w-full hover:scale-105">
+                    <button type="submit" className="btn btn-primary w-full hover:scale-105" disabled={!isValid || uploading || loading}>
                         Register
                     </button>
                     <p className="text-center text-sm">
@@ -140,6 +179,7 @@ export const Register = () => {
                 onClick={handleGoogleLogin}
                 className="flex items-center justify-center w-full p-4 mt-6 border rounded-md hover:scale-105 cursor-pointer  transition"
             >
+                {/* Google icon */}
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-5 h-5 mr-2 fill-current">
                     <path d="M16.318 13.714v5.484h9.078c-0.37 2.354-2.745 6.901-9.078 6.901-5.458 0-9.917-4.521-9.917-10.099s4.458-10.099 9.917-10.099c3.109 0 5.193 1.318 6.38 2.464l4.339-4.182c-2.786-2.599-6.396-4.182-10.719-4.182-8.844 0-16 7.151-16 16s7.156 16 16 16c9.234 0 15.365-6.49 15.365-15.635 0-1.052-0.115-1.854-0.255-2.651z"></path>
                 </svg>
@@ -148,5 +188,3 @@ export const Register = () => {
         </div>
     );
 };
-
-

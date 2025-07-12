@@ -3,8 +3,8 @@ import { useContext, useEffect } from 'react'
 import { AuthContext } from '../provider/AuthProvider'
 
 const axiosPrivate = axios.create({
-  baseURL: 'https://social-event-server.vercel.app'
-  // baseURL: 'http://localhost:3000'
+  // baseURL: 'https://social-event-server.vercel.app'
+  baseURL: 'http://localhost:3000'
 })
 
 const useAxiosPrivate = () => {
