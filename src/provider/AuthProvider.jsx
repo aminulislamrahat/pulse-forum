@@ -1,5 +1,4 @@
 import React, { createContext, useEffect, useState } from "react";
-export const AuthContext = createContext();
 import {
     createUserWithEmailAndPassword,
     GoogleAuthProvider,
@@ -11,13 +10,12 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase/Firebase.init";
 
+export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [dbUser, setDbUser] = useState(null);
     const [loading, setLoading] = useState(true);
-
-    // console.log(loading, user);
-
     const googleProvider = new GoogleAuthProvider();
 
     const signInWithGoogle = () => {
@@ -44,18 +42,36 @@ const AuthProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setUser(currentUser);
             setLoading(false);
+
+            if (currentUser) {
+                try {
+                    const token = await currentUser.getIdToken();
+                    const res = await fetch(
+                        `${import.meta.env.VITE_API_URL}/users/${currentUser.email}`,
+                        {
+                            headers: { Authorization: `Bearer ${token}` }
+                        }
+                    );
+                    const data = await res.json();
+                    setDbUser(data);
+                } catch {
+                    setDbUser(null);
+                }
+            } else {
+                setDbUser(null);
+            }
         });
-        return () => {
-            unsubscribe();
-        };
+        return () => unsubscribe();
     }, []);
 
     const authData = {
         user,
         setUser,
+        dbUser,
+        setDbUser,
         createUser,
         logOut,
         signIn,
@@ -64,7 +80,8 @@ const AuthProvider = ({ children }) => {
         updateUser,
         signInWithGoogle,
     };
-    return <AuthContext value={authData}>{children}</AuthContext>;
+
+    return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;
