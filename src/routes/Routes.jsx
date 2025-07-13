@@ -18,6 +18,7 @@ import ProjectDetails from "../components/projects/ProjectDetails";
 import BrowseTaskList from "../components/browseTask/BrowseTaskList";
 import UpcomingEventList from "../components/browseTask/UpcomingEventList";
 import MyJoinedEventList from "../components/myTask/MyJoinedEventList";
+import MembershipPage from "../pages/MembershipPage";
 
 export const Routes = createBrowserRouter([
     {
@@ -88,6 +89,11 @@ export const Routes = createBrowserRouter([
                 path: "forgot-password",
                 Component: ForgotPassword
             },
+            {
+                path: "membership",
+                element: <PrivateRoute> <MembershipPage /> </PrivateRoute>
+            },
+
 
 
         ],

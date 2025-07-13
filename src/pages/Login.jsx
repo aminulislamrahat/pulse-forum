@@ -8,8 +8,8 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import useAxiosPublic from '../api/useAxiosPublic';
 
 export const Login = () => {
-    const { signIn, signInWithGoogle } = useContext(AuthContext);
-    const [loading, setLoading] = useState(false);
+    const { signIn, signInWithGoogle, loading, setLoading } = useContext(AuthContext);
+    // const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();

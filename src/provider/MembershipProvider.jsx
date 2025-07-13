@@ -1,36 +1,42 @@
-import React, { createContext, useContext, useState } from "react";
-import useAxiosPrivate from "../api/useAxiosPrivate";
+import React, { createContext, useEffect, useContext } from "react";
 import { AuthContext } from "./AuthProvider";
-
+import useForumAPI from "../api/forumApi";
 
 export const MembershipContext = createContext();
 
 export const MembershipProvider = ({ children }) => {
-    const axiosPrivate = useAxiosPrivate();
-    const { user } = useContext(AuthContext);
-    const [membership, setMembership] = useState("bronze");
-    const [membershipLoading, setMembershipLoading] = useState(false);
+
+    const { dbUser, setDbUser } = useContext(AuthContext);
+    const { checkMembershipExpiry, getUserByEmail } = useForumAPI();
+
+
 
     // Function to check membership expiry
     const checkMembershipStatus = async () => {
-        if (!user) return "bronze";
-        setMembershipLoading(true);
+
         try {
-            // call your backend /users/:id/member-expiry-check
-            const res = await axiosPrivate.patch(`/users/${user.uid}/member-expiry-check`);
-            setMembership(res.data.member || "bronze");
-            setMembershipLoading(false);
-            return res.data.member || "bronze";
+            const user = await checkMembershipExpiry(dbUser._id);
+            const updatedUser = await getUserByEmail(dbUser.email);
+            setDbUser(updatedUser);
+
+            return user || "bronze";
         } catch (err) {
-            console.log(err)
-            setMembership("bronze");
-            setMembershipLoading(false);
+            console.log(err);
+
             return "bronze";
         }
     };
+    // --- Auto-check on dbUser change ---
+    useEffect(() => {
+        if (dbUser?._id) {
+            checkMembershipStatus();
+        }
+    }, [dbUser?._id]); // when user loads or changes
+
+
 
     return (
-        <MembershipContext.Provider value={{ membership, setMembership, membershipLoading, checkMembershipStatus }}>
+        <MembershipContext.Provider value={{ checkMembershipStatus }}>
             {children}
         </MembershipContext.Provider>
     );

@@ -10,9 +10,9 @@ import { uploadToCloudinary } from '../api/cloudinaryAPI';
 
 
 export const Register = () => {
-    const { createUser, updateUser, signInWithGoogle, setUser } = useContext(AuthContext);
+    const { createUser, updateUser, signInWithGoogle, setUser, loading, setLoading } = useContext(AuthContext);
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [imagePreview, setImagePreview] = useState("");
     const [uploading, setUploading] = useState(false);
@@ -69,10 +69,10 @@ export const Register = () => {
             setUser({ ...currentUser, displayName: name, photoURL: photo });
             await syncUserToDB(currentUser, name, photo);
 
-            Swal.fire('Success', 'Registration complete!', 'success');
+            await Swal.fire('Success', 'Registration complete!', 'success');
             navigate('/');
         } catch (error) {
-            Swal.fire('Registration Failed', error.message, 'error');
+            await Swal.fire('Registration Failed', error.message, 'error');
         } finally {
             setLoading(false);
         }
@@ -83,10 +83,10 @@ export const Register = () => {
         try {
             const result = await signInWithGoogle();
             await syncUserToDB(result.user);
-            Swal.fire('Success', 'Logged in with Google!', 'success');
+            await Swal.fire('Success', 'Logged in with Google!', 'success');
             navigate('/');
         } catch (error) {
-            Swal.fire('Login Failed', error.message, 'error');
+            await Swal.fire('Login Failed', error.message, 'error');
         } finally {
             setLoading(false);
         }

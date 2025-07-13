@@ -1,14 +1,23 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import { FaBars, FaTimes } from 'react-icons/fa'
-import { Link, NavLink, useNavigate } from 'react-router'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router'
 import { AuthContext } from '../../provider/AuthProvider'
 import Swal from 'sweetalert2'
+import { MembershipContext } from '../../provider/MembershipProvider'
 
 export default function Navbar() {
     const { user, logOut } = useContext(AuthContext)
+    const { checkMembershipStatus } = useContext(MembershipContext);
     const [menuOpen, setMenuOpen] = useState(false)
     const navigate = useNavigate()
+    const location = useLocation();
+
+    useEffect(() => {
+        checkMembershipStatus();
+    }, [location.pathname]);
+
+
 
     const handleLogout = async () => {
         try {
@@ -47,14 +56,14 @@ export default function Navbar() {
                         Home
                     </NavLink>
                     <NavLink
-                        to='/all-events'
+                        to='/membership'
                         className={({ isActive }) =>
                             isActive
                                 ? 'border-b-2'
                                 : 'cursor-pointer hover:text-primary transition-colors duration-200'
                         }
                     >
-                        Upcoming Events
+                        Membership
                     </NavLink>
                     {user ? (
                         // <>
@@ -285,11 +294,11 @@ export default function Navbar() {
                         Home
                     </NavLink>
                     <NavLink
-                        to='/all-events'
+                        to='/membership'
                         onClick={() => setMenuOpen(false)}
                         className='block px-2 py-1 hover:text-primary border-b-2'
                     >
-                        Upcoming Events
+                        Membership
                     </NavLink>
                     {user ? (
                         <>

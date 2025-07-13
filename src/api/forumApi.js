@@ -29,7 +29,28 @@ const useForumAPI = () => {
     const res = await axiosPrivate.get(`/users/${email}`)
     return res.data
   }
+  // --- Update user profile (name, photo, about) ---
+  const updateProfileDB = async (userId, { name, photo, about }) => {
+    // PATCH /users/:id/about (or similar endpoint in your backend)
+    const res = await axiosPrivate.patch(`/users/${userId}/about`, {
+      name,
+      photo,
+      about
+    })
+    return res.data // Should be the updated user object
+  }
 
+  // --- Upgrade membership ---
+  const upgradeMembership = async userId => {
+    const res = await axiosPrivate.patch(`/users/${userId}/member`)
+    return res.data.user // should return the updated user
+  }
+
+  // --- Check membership expiry ---
+  const checkMembershipExpiry = async userId => {
+    const res = await axiosPrivate.patch(`/users/${userId}/member-expiry-check`)
+    return res.data.user // returns updated user
+  }
   const createEvent = async eventData => {
     const res = await axiosPrivate.post('/create-event', eventData)
     return res.data
@@ -62,6 +83,9 @@ const useForumAPI = () => {
 
   return {
     getUserByEmail,
+    updateProfileDB,
+    upgradeMembership,
+    checkMembershipExpiry,
     getUpcomingEvents,
     getNearestEvents,
     getEventById,
