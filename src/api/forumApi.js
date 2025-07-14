@@ -51,33 +51,29 @@ const useForumAPI = () => {
     const res = await axiosPrivate.patch(`/users/${userId}/member-expiry-check`)
     return res.data.user // returns updated user
   }
-  const createEvent = async eventData => {
-    const res = await axiosPrivate.post('/create-event', eventData)
+
+  // --- PAYMENTS ---
+  // Create a Stripe payment intent
+  const createPaymentIntent = async amount => {
+    const res = await axiosPrivate.post('/create-payment-intent', { amount })
+    return res.data // { clientSecret }
+  }
+
+  // Save payment to DB after Stripe success
+  const savePayment = async paymentObj => {
+    const res = await axiosPrivate.post('/payments', paymentObj)
     return res.data
   }
 
-  const updateEvent = async (id, data) => {
-    const res = await axiosPrivate.put(`/update/event/${id}`, data)
+  // Get current user's payment history
+  const getMyPayments = async () => {
+    const res = await axiosPrivate.get('/payments/me')
     return res.data
   }
 
-  const deleteEvent = async id => {
-    const res = await axiosPrivate.delete(`/delete/event/${id}`)
-    return res.data
-  }
-
-  const joinEvent = async (eventId, eventData) => {
-    const res = await axiosPrivate.post(`/join-event/${eventId}`, eventData)
-    return res.data
-  }
-
-  const getJoinedEvents = async email => {
-    const res = await axiosPrivate.get(`/get/joined-events/${email}`)
-    return res.data
-  }
-
-  const getCreatedEvents = async email => {
-    const res = await axiosPrivate.get(`/get/created-events/${email}`)
+  // Get all users' payments (admin)
+  const getAllPayments = async () => {
+    const res = await axiosPrivate.get('/payments/all')
     return res.data
   }
 
@@ -86,15 +82,14 @@ const useForumAPI = () => {
     updateProfileDB,
     upgradeMembership,
     checkMembershipExpiry,
+    createPaymentIntent,
+    savePayment,
+    getMyPayments,
+    getAllPayments,
+
     getUpcomingEvents,
     getNearestEvents,
-    getEventById,
-    createEvent,
-    updateEvent,
-    deleteEvent,
-    joinEvent,
-    getJoinedEvents,
-    getCreatedEvents
+    getEventById
   }
 }
 

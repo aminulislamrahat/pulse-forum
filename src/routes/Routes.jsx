@@ -19,6 +19,7 @@ import BrowseTaskList from "../components/browseTask/BrowseTaskList";
 import UpcomingEventList from "../components/browseTask/UpcomingEventList";
 import MyJoinedEventList from "../components/myTask/MyJoinedEventList";
 import MembershipPage from "../pages/MembershipPage";
+import DashboardLayout from "../layouts/DashboardLayout ";
 
 export const Routes = createBrowserRouter([
     {
@@ -97,6 +98,17 @@ export const Routes = createBrowserRouter([
 
 
         ],
+    },
+    {
+        path: "/dashboard",
+        element: <PrivateRoute><DashboardLayout /></PrivateRoute>,
+        children: [
+            { index: true, element: <MembershipPage /> },
+            // { path: "tasks", element: <BrowseTaskList /> },
+            // { path: "add-task", element: <ProjectCreate /> },
+            // { path: "my-posted-task", element: <MyTaskList /> },
+            // { path: "profile", element: <MyProfile /> }
+        ]
     },
     {
         path: "/*",
