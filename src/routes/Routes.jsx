@@ -20,6 +20,9 @@ import UpcomingEventList from "../components/browseTask/UpcomingEventList";
 import MyJoinedEventList from "../components/myTask/MyJoinedEventList";
 import MembershipPage from "../pages/MembershipPage";
 import DashboardLayout from "../layouts/DashboardLayout ";
+import MembersList from "../components/users/MembersList";
+import MyPayments from "../components/payment/MyPayments";
+import AllPayments from "../components/payment/AllPayments";
 
 export const Routes = createBrowserRouter([
     {
@@ -94,6 +97,18 @@ export const Routes = createBrowserRouter([
                 path: "membership",
                 element: <PrivateRoute> <MembershipPage /> </PrivateRoute>
             },
+            {
+                path: "manage-users",
+                element: <PrivateRoute> <MembersList /> </PrivateRoute>
+            },
+            {
+                path: "payments",
+                element: <PrivateRoute> <MyPayments /> </PrivateRoute>
+            },
+            {
+                path: "all-payments",
+                element: <PrivateRoute> <AllPayments /> </PrivateRoute>
+            },
 
 
 
@@ -105,9 +120,9 @@ export const Routes = createBrowserRouter([
         children: [
             { index: true, element: <MembershipPage /> },
             { path: "my-profile", element: <MyProfile /> },
-            // { path: "add-task", element: <ProjectCreate /> },
-            // { path: "my-posted-task", element: <MyTaskList /> },
-            // { path: "profile", element: <MyProfile /> }
+            { path: "manage-users", element: <MembersList /> },
+            { path: "all-payments", element: <AllPayments /> },
+            { path: "payments", element: <MyPayments /> }
         ]
     },
     {

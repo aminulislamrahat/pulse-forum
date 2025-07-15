@@ -36,7 +36,7 @@ const Sidebar = ({ handleLogout }) => {
                                 }
                             >👤 My Profile</NavLink>
                             <NavLink
-                                to="/manage-users"
+                                to="/dashboard/manage-users"
                                 className={({ isActive }) =>
                                     isActive
                                         ? "text-primary text-xl font-semibold border-b border-primary pb-1"
@@ -76,7 +76,7 @@ const Sidebar = ({ handleLogout }) => {
                                 }
                             >🚩 Reported Comments</NavLink>
                             <NavLink
-                                to="/all-payments"
+                                to="/dashboard/all-payments"
                                 className={({ isActive }) =>
                                     isActive
                                         ? "text-primary text-xl font-semibold border-b border-primary pb-1"
@@ -130,7 +130,7 @@ const Sidebar = ({ handleLogout }) => {
                                 }
                             >🏅 Membership</NavLink>
                             <NavLink
-                                to="/payments"
+                                to="/dashboard/payments"
                                 className={({ isActive }) =>
                                     isActive
                                         ? "text-primary text-xl font-semibold border-b border-primary pb-1"

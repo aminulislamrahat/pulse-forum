@@ -52,6 +52,19 @@ const useForumAPI = () => {
     return res.data.user // returns updated user
   }
 
+  //get members
+  const getMembers = async ({ page, limit, search }) => {
+    const res = await axiosPrivate.get(
+      `/users?page=${page}&limit=${limit}&search=${search}`
+    )
+    return res.data // { users, total }
+  }
+  // user role change
+  const updateUserRole = async (userId, role) => {
+    const res = await axiosPrivate.patch(`/users/${userId}/role`, { role })
+    return res.data
+  }
+
   // --- PAYMENTS ---
   // Create a Stripe payment intent
   const createPaymentIntent = async amount => {
@@ -66,15 +79,19 @@ const useForumAPI = () => {
   }
 
   // Get current user's payment history
-  const getMyPayments = async () => {
-    const res = await axiosPrivate.get('/payments/me')
-    return res.data
+  const getMyPayments = async ({ page, limit, search }) => {
+    const res = await axiosPrivate.get(
+      `/payments/me?page=${page}&limit=${limit}&search=${search || ''}`
+    )
+    return res.data // { payments, total }
   }
 
   // Get all users' payments (admin)
-  const getAllPayments = async () => {
-    const res = await axiosPrivate.get('/payments/all')
-    return res.data
+  const getAllPayments = async ({ page, limit, search }) => {
+    const res = await axiosPrivate.get(
+      `/payments/all?page=${page}&limit=${limit}&search=${search || ''}`
+    )
+    return res.data // { payments, total }
   }
 
   return {
@@ -82,6 +99,8 @@ const useForumAPI = () => {
     updateProfileDB,
     upgradeMembership,
     checkMembershipExpiry,
+    getMembers,
+    updateUserRole,
     createPaymentIntent,
     savePayment,
     getMyPayments,
