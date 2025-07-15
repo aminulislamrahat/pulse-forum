@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
 
-import { FaBars, FaTimes } from 'react-icons/fa'
+import { FaBars, FaBell, FaTimes } from 'react-icons/fa'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router'
 import { AuthContext } from '../../provider/AuthProvider'
 import Swal from 'sweetalert2'
 import { MembershipContext } from '../../provider/MembershipProvider'
 
 export default function Navbar() {
-    const { user, logOut } = useContext(AuthContext)
+    const { user, logOut, dbUser } = useContext(AuthContext)
     const { checkMembershipStatus } = useContext(MembershipContext);
     const [menuOpen, setMenuOpen] = useState(false)
     const navigate = useNavigate()
@@ -66,39 +66,7 @@ export default function Navbar() {
                         Membership
                     </NavLink>
                     {user ? (
-                        // <>
-                        //     <NavLink
-                        //         to='/add-task'
-                        //         className={({ isActive }) =>
-                        //             isActive
-                        //                 ? 'border-b-2'
-                        //                 : 'cursor-pointer hover:text-primary transition-colors duration-200'
-                        //         }
-                        //     >
-                        //         Add Task
-                        //     </NavLink>
-                        //     <NavLink
-                        //         to='/my-task'
-                        //         className={({ isActive }) =>
-                        //             isActive
-                        //                 ? 'border-b-2'
-                        //                 : 'cursor-pointer hover:text-primary transition-colors duration-200'
-                        //         }
-                        //     >
-                        //         My Posted Tasks
-                        //     </NavLink>
-                        //     {/* <NavLink
-                        //         to='/my-profile'
-                        //         className={({ isActive }) =>
-                        //             isActive
-                        //                 ? 'border-b-2'
-                        //                 : 'cursor-pointer hover:text-primary transition-colors duration-200'
-                        //         }
-                        //     >
-                        //         Profile
-                        //     </NavLink> */}
 
-                        // </>
                         null
                     ) : (
                         <>
@@ -182,20 +150,40 @@ export default function Navbar() {
                 {/* Avatar */}
                 <div className='navbar-end hidden md:flex items-center gap-4'>
                     {user ? (
-                        <><Link
-                            onClick={handleLogout}
-                            className='btn btn-primary card px-10 hover:scale-110 transition cursor-pointer'
-                        >
-                            Logout
-                        </Link>
-                            <div className='relative ml-2'>
+                        <>
+
+                            <div className="dropdown dropdown-end">
+                                <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+                                    <div className="indicator">
+                                        <FaBell size={24} />
+                                        <span className="badge badge-sm indicator-item">8</span>
+                                    </div>
+                                </div>
+                                <ul
+                                    tabIndex={0}
+                                    className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                                    <li>
+                                        <div>notification 2</div>
+                                    </li>
+                                    <li>
+                                        <div>notification 2</div>
+                                    </li>
+
+                                    <li>
+                                        <div className='mx-auto text-primary'>See All</div>
+                                    </li>
+
+                                </ul>
+                            </div>
+
+                            <div className='dropdown dropdown-end ml-2'>
                                 {/* Trigger */}
-                                <div className='peer btn btn-ghost btn-circle avatar'>
-                                    <div className='w-10 rounded-full'>
+                                <div tabIndex={0} role="button" className='peer btn btn-ghost btn-circle avatar'>
+                                    <div className='w-10 rounded-full border-2 border-primary'>
                                         <img
                                             alt='Avatar'
                                             src={
-                                                user?.photoURL ||
+                                                dbUser?.photo ||
                                                 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp'
                                             }
                                         />
@@ -204,24 +192,16 @@ export default function Navbar() {
 
                                 {/* Dropdown */}
                                 <ul
-                                    className='absolute right-0 mt-2 w-52 p-2 menu menu-sm bg-base-100 rounded-box shadow z-10
-               opacity-0  
-               peer-hover:opacity-100 peer-hover:visible 
-               hover:opacity-100 hover:visible 
-               transition-opacity duration-200'
+                                    tabIndex={0}
+                                    className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
                                 >
                                     <li>
-                                        <Link to='/my-profile'>Profile ({user?.displayName})</Link>
+                                        <div>{dbUser?.name}</div>
                                     </li>
                                     <li>
-                                        <Link to='/add-event'>Create Event</Link>
+                                        <Link to='/dashboard'>Dashboard</Link>
                                     </li>
-                                    <li>
-                                        <Link to='/manage-events'>Manage Events</Link>
-                                    </li>
-                                    <li>
-                                        <Link to='/joined-events'>Joined Events</Link>
-                                    </li>
+
                                     <li>
                                         <button onClick={handleLogout}>Logout</button>
                                     </li>
@@ -233,7 +213,7 @@ export default function Navbar() {
                             to='/login'
                             className='btn btn-primary card px-10 hover:scale-110 transition cursor-pointer'
                         >
-                            Login
+                            Join Us
                         </Link>
                     )}
 
@@ -334,7 +314,7 @@ export default function Navbar() {
                                             <img
                                                 alt='Avatar'
                                                 src={
-                                                    user?.photoURL ||
+                                                    dbUser?.photo ||
                                                     'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp'
                                                 }
                                             />

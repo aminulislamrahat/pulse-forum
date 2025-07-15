@@ -8,7 +8,7 @@ import { AuthContext } from "../provider/AuthProvider";
 
 
 const DashboardLayout = () => {
-    const { user, logOut } = useContext(AuthContext);
+    const { logOut } = useContext(AuthContext);
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const navigate = useNavigate();
 
@@ -29,7 +29,7 @@ const DashboardLayout = () => {
                 className={`fixed z-10 top-0 left-0 h-full w-64 bg-base-200 transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
                     } md:translate-x-0`}
             >
-                <Sidebar handleLogout={handleLogout} user={user} />
+                <Sidebar handleLogout={handleLogout} />
             </div>
 
             {/* Main Content */}

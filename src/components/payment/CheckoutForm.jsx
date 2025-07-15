@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../provider/AuthProvider";
 import useForumAPI from "../../api/forumApi";
+import { useQuery } from "@tanstack/react-query";
 
 export default function CheckoutForm({ amount, onSuccess }) {
     const stripe = useStripe();
@@ -10,6 +11,18 @@ export default function CheckoutForm({ amount, onSuccess }) {
     const { dbUser, setDbUser } = useContext(AuthContext);
     const { createPaymentIntent, savePayment, upgradeMembership, getUserByEmail } = useForumAPI();
     const [loading, setLoading] = useState(false);
+
+    // TanStack Query: Get user by email (cached and refetchable)
+    const {
+        data: latestUser,
+        refetch: refetchUser,
+        isFetching: isFetchingUser
+    } = useQuery({
+        queryKey: ["user", dbUser?.email],
+        queryFn: () => getUserByEmail(dbUser.email),
+        enabled: !!dbUser?.email, // Only run when email exists
+        // initialData: dbUser, // Optionally use initial dbUser for immediate access
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -39,8 +52,8 @@ export default function CheckoutForm({ amount, onSuccess }) {
             // 4. Upgrade membership (backend)
             await upgradeMembership(dbUser._id);
 
-            // 5. Refetch user info and update context
-            const updatedUser = await getUserByEmail(dbUser.email);
+            // 5. Refetch user info and update context using TanStack Query
+            const { data: updatedUser } = await refetchUser();
             setDbUser(updatedUser);
 
             Swal.fire("Success", "Payment successful! You are now a Gold Member.", "success");
@@ -74,15 +87,14 @@ export default function CheckoutForm({ amount, onSuccess }) {
             </div>
             <button
                 type="submit"
-                disabled={!stripe || loading}
+                disabled={!stripe || loading || isFetchingUser}
                 className="btn btn-primary w-full text-lg tracking-wide shadow"
             >
                 {loading ? "Processing..." : `Pay $${amount}`}
             </button>
-            {/* <div className="text-xs text-gray-400 text-center">
-                Use Stripe test card: <br />
-                <b>4242 4242 4242 4242</b>, any future date, any CVC.
-            </div> */}
+            {isFetchingUser && (
+                <div className="text-center text-xs text-gray-400">Updating your membership...</div>
+            )}
         </form>
     );
 }

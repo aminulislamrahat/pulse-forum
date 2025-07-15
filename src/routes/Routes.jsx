@@ -104,7 +104,7 @@ export const Routes = createBrowserRouter([
         element: <PrivateRoute><DashboardLayout /></PrivateRoute>,
         children: [
             { index: true, element: <MembershipPage /> },
-            // { path: "tasks", element: <BrowseTaskList /> },
+            { path: "my-profile", element: <MyProfile /> },
             // { path: "add-task", element: <ProjectCreate /> },
             // { path: "my-posted-task", element: <MyTaskList /> },
             // { path: "profile", element: <MyProfile /> }
