@@ -12,9 +12,9 @@ const MembershipPage = () => {
     const [showStripe, setShowStripe] = useState(false);
 
     return (
-        <>
+        <div className="w-full mx-auto p-6 md:p-12  bg-base-100">
             <h1 className="text-3xl font-bold text-center mb-10">Choose Your Membership</h1>
-            <div className="w-full max-w-4xl grid gap-6 md:grid-cols-2">
+            <div className="w-full mx-auto max-w-4xl grid gap-6 md:grid-cols-2">
                 {/* Free/Bronze Card */}
                 <div className="rounded-2xl border-2 border-gray-200 bg-white p-8 shadow-md flex flex-col">
                     <div className="flex items-center mb-3">
@@ -84,7 +84,7 @@ const MembershipPage = () => {
             <div className="mt-6 text-center text-sm text-gray-500">
                 Membership upgrades last for 1 month.
             </div>
-        </>
+        </div>
     );
 };
 
