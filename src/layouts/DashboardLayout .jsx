@@ -44,7 +44,8 @@ const DashboardLayout = () => {
 
                 {/* Scrollable Content Area */}
                 <div className="flex-1 overflow-y-auto p-6">
-                    <Outlet />
+                    <div className='min-h-screen flex flex-col justify-start items-center bg-base-200 px-4 lg:px-24 py-10'><Outlet /></div>
+
                 </div>
             </div>
         </div>

@@ -94,6 +94,29 @@ const useForumAPI = () => {
     return res.data // { payments, total }
   }
 
+  // Get all tags (optional search)
+  const getAllTags = async (search = '') => {
+    const res = await axiosPublic.get(
+      `/tags${search ? `?search=${search}` : ''}`
+    )
+    return res.data
+  }
+
+  // Create new tag (admin)
+  const createTag = async data => {
+    return (await axiosPrivate.post('/tags', data)).data
+  }
+
+  // Update tag (admin)
+  const updateTag = async (id, data) => {
+    return (await axiosPrivate.patch(`/tags/${id}`, data)).data
+  }
+
+  // Delete tag (admin)
+  const deleteTag = async id => {
+    return (await axiosPrivate.delete(`/tags/${id}`)).data
+  }
+
   return {
     getUserByEmail,
     updateProfileDB,
@@ -105,6 +128,10 @@ const useForumAPI = () => {
     savePayment,
     getMyPayments,
     getAllPayments,
+    getAllTags,
+    createTag,
+    updateTag,
+    deleteTag,
 
     getUpcomingEvents,
     getNearestEvents,

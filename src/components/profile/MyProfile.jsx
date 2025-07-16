@@ -99,8 +99,8 @@ const MyProfile = () => {
     };
 
     return (
-        <div className='min-h-screen flex flex-col justify-center items-center bg-base-200 px-4 py-10'>
-            <div className="max-w-xl mx-auto px-4 py-20">
+        <>
+            <div className="w-full bg-base-100 mx-auto p-6 md:p-12">
                 <title>{dbUser.name}</title>
                 <h2 className="text-3xl font-bold text-center mb-6">My Profile</h2>
                 <div className="flex flex-col items-center mb-4">
@@ -169,7 +169,7 @@ const MyProfile = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </>
 
     );
 };

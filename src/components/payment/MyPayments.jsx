@@ -41,7 +41,7 @@ const MyPayments = () => {
     };
 
     return (
-        <div className="max-w-3xl mx-auto p-4">
+        <div className="w-full mx-auto p-6 md:p-12  bg-base-100">
             <h2 className="text-2xl font-bold mb-4">My Payment History</h2>
             <div className="flex flex-col sm:flex-row justify-between mb-4 gap-2">
                 <input

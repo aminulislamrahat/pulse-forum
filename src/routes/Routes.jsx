@@ -23,6 +23,7 @@ import DashboardLayout from "../layouts/DashboardLayout ";
 import MembersList from "../components/users/MembersList";
 import MyPayments from "../components/payment/MyPayments";
 import AllPayments from "../components/payment/AllPayments";
+import TagManagement from "../components/tag/TagManagement";
 
 export const Routes = createBrowserRouter([
     {
@@ -109,6 +110,10 @@ export const Routes = createBrowserRouter([
                 path: "all-payments",
                 element: <PrivateRoute> <AllPayments /> </PrivateRoute>
             },
+            {
+                path: "/manage-tags",
+                element: <PrivateRoute> <TagManagement /> </PrivateRoute>
+            },
 
 
 
@@ -122,7 +127,9 @@ export const Routes = createBrowserRouter([
             { path: "my-profile", element: <MyProfile /> },
             { path: "manage-users", element: <MembersList /> },
             { path: "all-payments", element: <AllPayments /> },
-            { path: "payments", element: <MyPayments /> }
+            { path: "payments", element: <MyPayments /> },
+            { path: "manage-tags", element: <TagManagement /> },
+            { path: "membership", element: <MembershipPage /> },
         ]
     },
     {

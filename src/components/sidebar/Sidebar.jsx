@@ -52,7 +52,7 @@ const Sidebar = ({ handleLogout }) => {
                                 }
                             >🛡️ Manage Posts</NavLink>
                             <NavLink
-                                to="/manage-tags"
+                                to="/dashboard/manage-tags"
                                 className={({ isActive }) =>
                                     isActive
                                         ? "text-primary text-xl font-semibold border-b border-primary pb-1"
@@ -122,7 +122,7 @@ const Sidebar = ({ handleLogout }) => {
                                 }
                             >👤 My Profile</NavLink>
                             <NavLink
-                                to="/membership"
+                                to="/dashboard/membership"
                                 className={({ isActive }) =>
                                     isActive
                                         ? "text-primary text-xl font-semibold border-b border-primary pb-1"

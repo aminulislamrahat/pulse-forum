@@ -69,8 +69,8 @@ const MembersList = () => {
 
     // Responsive Table: show as table on desktop, stacked on mobile
     return (
-        <div className='min-h-screen flex flex-col justify-center items-center bg-base-200 px-4 lg:px-24 py-10'>
-            <div className="w-full mx-auto p-12 bg-base-100">
+        <>
+            <div className="w-full mx-auto p-6 md:p-12  bg-base-100">
                 <h2 className="text-2xl font-bold mb-6">All Members</h2>
                 <div className="flex flex-col sm:flex-row justify-between mb-4 gap-2">
                     <input
@@ -232,7 +232,7 @@ const MembersList = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </>
 
     );
 };

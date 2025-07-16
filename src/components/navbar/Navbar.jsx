@@ -156,7 +156,7 @@ export default function Navbar() {
                                 <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
                                     <div className="indicator">
                                         <FaBell size={24} />
-                                        <span className="badge badge-sm indicator-item">8</span>
+                                        <span className="badge badge-sm indicator-item bg-red-700 text-white">8</span>
                                     </div>
                                 </div>
                                 <ul
