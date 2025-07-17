@@ -6,6 +6,7 @@ import useForumAPI from "../../api/forumApi";
 import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
+import { uploadToCloudinary } from "../../api/cloudinaryAPI";
 
 const BADGE = {
     bronze: {
@@ -21,10 +22,10 @@ const BADGE = {
 };
 
 const MyProfile = () => {
-    const { dbUser, setDbUser, updateProfileDB } = useContext(AuthContext);
+    const { dbUser, setDbUser } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const { uploadToCloudinary, getRecentPostsByAuthor } = useForumAPI();
+    const { updateProfileDB, getRecentPostsByAuthor } = useForumAPI();
 
     // Form for editing profile
     const {
@@ -110,7 +111,7 @@ const MyProfile = () => {
             <div className="flex flex-col items-center mb-6">
                 <div className="relative">
                     <img
-                        src={imagePreview || "https://i.ibb.co/FzR8HMC/avatar-placeholder.png"}
+                        src={imagePreview ? imagePreview : dbUser?.photo}
                         alt="Profile"
                         className="w-24 h-24 rounded-full shadow mb-2 object-cover"
                     />
@@ -122,7 +123,7 @@ const MyProfile = () => {
                             onChange={handleImageChange}
                             disabled={uploading}
                         />
-                        <span className="inline-block bg-primary text-white rounded-full p-1 text-xs shadow">
+                        <span className="inline-block bg-primary text-white rounded-full px-1 shadow">
                             {uploading ? "..." : "✎"}
                         </span>
                     </label>
@@ -153,15 +154,7 @@ const MyProfile = () => {
                     />
                     {errors.name && <span className="text-error text-xs">Name is required (min 2 chars).</span>}
                 </div>
-                <div>
-                    <label className="block font-semibold mb-1">Photo URL</label>
-                    <input
-                        {...register("photo", { required: true })}
-                        className="input input-bordered w-full"
-                        placeholder="Profile photo URL"
-                        disabled={loading}
-                    />
-                </div>
+
                 <div>
                     <label className="block font-semibold mb-1">About Me</label>
                     <textarea
