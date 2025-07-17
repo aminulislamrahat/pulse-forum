@@ -28,6 +28,7 @@ import AddPost from "../components/posts/AddPost";
 import MyPosts from "../components/posts/MyPosts";
 import EditPost from "../components/posts/EditPost";
 import CommentsPage from "../components/comment/CommentsPage";
+import PostDetails from "../components/posts/PostDetails";
 
 export const Routes = createBrowserRouter([
     {
@@ -148,6 +149,16 @@ export const Routes = createBrowserRouter([
                     },
                 ],
             },
+            {
+                path: "/posts",
+                children: [
+
+                    {
+                        path: ":id",
+                        element: <PostDetails />
+                    },
+                ],
+            },
 
 
 
@@ -183,6 +194,16 @@ export const Routes = createBrowserRouter([
                     {
                         path: ":id",
                         element: <CommentsPage />
+                    },
+                ],
+            },
+            {
+                path: "posts",
+                children: [
+
+                    {
+                        path: ":id",
+                        element: <PostDetails />
                     },
                 ],
             },

@@ -32,8 +32,8 @@ export default function CommentsPage() {
 
     if (isLoading || !dbUser) return <LoadingSpinner />;
     const post = postData?.post;
-    const comments = post?.comments || [];
-
+    const comments = postData?.postComments || [];
+    console.log("post data", comments)
     // Only post owner can report
     const canReport = dbUser?.email === post?.authorEmail;
 
@@ -71,15 +71,15 @@ export default function CommentsPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {comments.map(comment => {
-                            const isOwnComment = comment.email === dbUser.email;
+                        {comments?.map(comment => {
+                            const isOwnComment = comment?.email === dbUser.email;
                             return (
                                 <tr key={comment._id} className="text-center">
-                                    <td className="font-mono text-xs">{comment.email}</td>
+                                    <td className="font-mono text-xs">{comment?.email}</td>
                                     <td>
-                                        {comment.content.length > 20 ? (
+                                        {comment.text.length > 20 ? (
                                             <>
-                                                {comment.content.slice(0, 20)}...
+                                                {comment.text.slice(0, 20)}...
                                                 <button
                                                     className="link text-primary text-xs ml-1"
                                                     onClick={() => handleSeeMore(comment)}
@@ -87,7 +87,7 @@ export default function CommentsPage() {
                                                     See more
                                                 </button>
                                             </>
-                                        ) : comment.content}
+                                        ) : comment.text}
                                     </td>
                                     <td>
                                         <select
@@ -128,7 +128,7 @@ export default function CommentsPage() {
             {/* Modal for See More */}
             {expandedComment && (
                 <div
-                    className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50"
+                    className="fixed inset-0 bg-black/40  flex items-center justify-center z-50"
                     onClick={() => setExpandedComment(null)}
                 >
                     <div
@@ -142,7 +142,7 @@ export default function CommentsPage() {
                             ×
                         </button>
                         <h3 className="font-bold mb-2 text-lg">Full Comment</h3>
-                        <p className="whitespace-pre-line">{expandedComment.content}</p>
+                        <p className="whitespace-pre-line">{expandedComment.text}</p>
                     </div>
                 </div>
             )}
