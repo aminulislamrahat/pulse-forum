@@ -24,6 +24,10 @@ import MembersList from "../components/users/MembersList";
 import MyPayments from "../components/payment/MyPayments";
 import AllPayments from "../components/payment/AllPayments";
 import TagManagement from "../components/tag/TagManagement";
+import AddPost from "../components/posts/AddPost";
+import MyPosts from "../components/posts/MyPosts";
+import EditPost from "../components/posts/EditPost";
+import CommentsPage from "../components/comment/CommentsPage";
 
 export const Routes = createBrowserRouter([
     {
@@ -82,6 +86,7 @@ export const Routes = createBrowserRouter([
                 path: "all-events",
                 Component: UpcomingEventList
             },
+            //new project
             {
                 path: "terms-and-conditions",
                 Component: TermsAndConditions
@@ -114,6 +119,35 @@ export const Routes = createBrowserRouter([
                 path: "/manage-tags",
                 element: <PrivateRoute> <TagManagement /> </PrivateRoute>
             },
+            {
+                path: "/add-post",
+                element: <PrivateRoute> <AddPost /> </PrivateRoute>
+            },
+            {
+                path: "/my-posts",
+                element: <PrivateRoute> <MyPosts /> </PrivateRoute>
+            },
+
+            {
+                path: "/edit-post/",
+                children: [
+
+                    {
+                        path: ":id",
+                        element: <PrivateRoute><EditPost /></PrivateRoute>
+                    },
+                ],
+            },
+            {
+                path: "/posts/comments",
+                children: [
+
+                    {
+                        path: ":id",
+                        element: <PrivateRoute><CommentsPage /></PrivateRoute>
+                    },
+                ],
+            },
 
 
 
@@ -130,6 +164,28 @@ export const Routes = createBrowserRouter([
             { path: "payments", element: <MyPayments /> },
             { path: "manage-tags", element: <TagManagement /> },
             { path: "membership", element: <MembershipPage /> },
+            { path: "add-post", element: <AddPost /> },
+            { path: "my-posts", element: <MyPosts /> },
+            {
+                path: "edit-post",
+                children: [
+
+                    {
+                        path: ":id",
+                        element: <EditPost />
+                    },
+                ],
+            },
+            {
+                path: "posts/comments",
+                children: [
+
+                    {
+                        path: ":id",
+                        element: <CommentsPage />
+                    },
+                ],
+            },
         ]
     },
     {

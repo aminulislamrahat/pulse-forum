@@ -61,9 +61,11 @@ const AllPayments = () => {
             <div className="overflow-x-auto">
                 <table className="table w-full">
                     <thead>
-                        <tr>
+                        <tr className="text-center">
                             <th>Payment ID</th>
-                            <th>User ID</th>
+                            <th>Card's last 4 digit</th>
+                            <th>User name</th>
+                            <th>User email</th>
                             <th>Amount</th>
                             <th>Status</th>
                             <th>Date</th>
@@ -71,9 +73,11 @@ const AllPayments = () => {
                     </thead>
                     <tbody>
                         {payments.map(payment => (
-                            <tr key={payment._id}>
+                            <tr key={payment._id} className="text-center">
                                 <td className="text-xs">{payment.paymentId}</td>
-                                <td className="text-xs">{payment.userId}</td>
+                                <td className="text-xs">{payment.cardLast4}</td>
+                                <td className="text-xs">{payment.userName}</td>
+                                <td className="text-xs">{payment.userEmail}</td>
                                 <td>${payment.amount}</td>
                                 <td>
                                     <span className={`badge badge-${payment.status === "succeeded" ? "success" : "error"}`}>

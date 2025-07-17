@@ -32,21 +32,38 @@ export default function CheckoutForm({ amount, onSuccess }) {
         const { clientSecret } = await createPaymentIntent(amount);
 
         // 2. Stripe: confirm card payment
-        const card = elements.getElement(CardElement);
+        // 2. Create Payment Method first to get last4
+        const { paymentMethod, error } = await stripe.createPaymentMethod({
+            type: 'card',
+            card: elements.getElement(CardElement),
+        });
+
+        if (error) {
+            Swal.fire("Payment failed", error.message, "error");
+            setLoading(false);
+            return;
+        }
+
+        // 3. Now confirm payment with paymentMethod.id
         const result = await stripe.confirmCardPayment(clientSecret, {
-            payment_method: { card }
+            payment_method: paymentMethod.id
         });
 
         if (result.error) {
             Swal.fire("Payment failed", result.error.message, "error");
         } else if (result.paymentIntent.status === "succeeded") {
             // 3. Save payment in DB
+            console.log("payment res", result)
+            const last4 = paymentMethod.card.last4;
             await savePayment({
                 paymentId: result.paymentIntent.id,
                 userId: dbUser._id,
+                userEmail: dbUser.email,
+                userName: dbUser.name,
                 amount,
                 status: "succeeded",
                 createdAt: new Date(),
+                cardLast4: last4,
             });
 
             // 4. Upgrade membership (backend)

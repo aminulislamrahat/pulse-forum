@@ -37,6 +37,26 @@ const useForumAPI = () => {
     return res.data
   }
 
+  // Log a search/tag
+  const logSearchTag = async tag => {
+    // POST /searches { tag }
+    const res = await axiosPublic.post('/searches', { tag })
+    return res.data
+  }
+
+  // Get 3 most popular tags (last 7 days)
+  const getPopularSearchTags = async () => {
+    // GET /searches/popular
+    const res = await axiosPublic.get('/searches/popular')
+    return res.data // Array of { tag, count, lastSearched }
+  }
+
+  // Get post by ID
+  const getPostById = async id => {
+    const res = await axiosPublic.get(`/posts/${id}`)
+    return res.data
+  }
+
   //Private APIs
 
   const getUserByEmail = async email => {
@@ -198,10 +218,9 @@ const useForumAPI = () => {
   }
 
   // Report a comment (post owner only)
-  const reportComment = async (commentId, { reason, description }) => {
+  const reportComment = async (commentId, reason) => {
     const res = await axiosPrivate.post(`/comments/${commentId}/report`, {
-      reason,
-      description
+      reason
     })
     return res.data
   }
@@ -306,6 +325,9 @@ const useForumAPI = () => {
     getAnnouncementById,
     getNotifications,
     markNotificationRead,
+    logSearchTag,
+    getPopularSearchTags,
+    getPostById,
     getUnreadNotificationCount
   }
 }

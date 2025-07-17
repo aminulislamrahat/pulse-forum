@@ -1,176 +1,257 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import Swal from 'sweetalert2';
-import { AuthContext } from '../../provider/AuthProvider';
-import useForumAPI from '../../api/forumApi';
-import { uploadToCloudinary } from '../../api/cloudinaryAPI'; // Adjust path as needed
-import LoadingSpinner from '../../components/LoadingSpinner';
+import React, { useContext, useState } from "react";
+import Swal from "sweetalert2";
+import { AuthContext } from "../../provider/AuthProvider";
+import LoadingSpinner from "../LoadingSpinner";
+import useForumAPI from "../../api/forumApi";
 import { useForm } from "react-hook-form";
-import { FaMedal } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router";
+
+const BADGE = {
+    bronze: {
+        label: "Bronze",
+        color: "bg-yellow-800",
+        icon: "🥉",
+    },
+    gold: {
+        label: "Gold",
+        color: "bg-yellow-300",
+        icon: "🥇",
+    },
+};
 
 const MyProfile = () => {
-    const { dbUser, setDbUser } = useContext(AuthContext);
-    const { updateProfileDB } = useForumAPI();
-    const imageInputRef = useRef();
-    const [imagePreview, setImagePreview] = useState(dbUser?.photo || 'https://i.ibb.co/FzR8HMC/avatar-placeholder.png');
-    const [uploading, setUploading] = useState(false);
+    const { dbUser, setDbUser, updateProfileDB } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const { uploadToCloudinary, getRecentPostsByAuthor } = useForumAPI();
 
+    // Form for editing profile
     const {
         register,
         handleSubmit,
-        reset,
         setValue,
-        formState: { errors, isSubmitting }
+
+        formState: { errors },
     } = useForm({
         defaultValues: {
             name: dbUser?.name || "",
-            about: dbUser?.about || "",
             photo: dbUser?.photo || "",
-        }
+            about: dbUser?.about || "",
+        },
     });
 
-    useEffect(() => {
-        if (dbUser) {
-            reset({
-                name: dbUser.name || "",
-                about: dbUser.about || "",
-                photo: dbUser.photo || "",
-            });
-            setImagePreview(dbUser.photo || 'https://i.ibb.co/FzR8HMC/avatar-placeholder.png');
-        }
-    }, [dbUser, reset]);
+    // Update form fields when dbUser changes
+    React.useEffect(() => {
+        setValue("name", dbUser?.name || "");
+        setValue("photo", dbUser?.photo || "");
+        setValue("about", dbUser?.about || "");
+    }, [dbUser, setValue]);
 
-    if (!dbUser) return <LoadingSpinner />;
+    // Image preview logic
+    const [imagePreview, setImagePreview] = useState(dbUser?.photo || "");
+    const [uploading, setUploading] = useState(false);
 
-    // Badge logic
-    const isGold = dbUser?.member === "gold" &&
-        (!dbUser.memberExpiresAt || new Date(dbUser.memberExpiresAt) > new Date());
-
-    // Image upload handler
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
         setUploading(true);
         try {
             const url = await uploadToCloudinary(file);
-            setValue("photo", url); // update form value
-            setImagePreview(url);   // update preview
+            setValue("photo", url);
+            setImagePreview(url);
         } catch {
-            Swal.fire('Error', 'Image upload failed', 'error');
+            Swal.fire("Error", "Image upload failed", "error");
         } finally {
             setUploading(false);
         }
     };
 
+    // Save handler
     const onSubmit = async (data) => {
+        setLoading(true);
         try {
-            // Data.photo is already uploaded and set
-            const updatedUser = await updateProfileDB(dbUser._id, {
+            const updated = await updateProfileDB(dbUser._id, {
                 name: data.name,
                 photo: data.photo,
-                about: data.about
+                about: data.about,
             });
-
-            setDbUser({
-                ...dbUser,
-                name: updatedUser.name || data.name,
-                photo: updatedUser.photo || data.photo,
-                about: updatedUser.about || data.about,
-                member: updatedUser.member || dbUser.member,
-                memberExpiresAt: updatedUser.memberExpiresAt || dbUser.memberExpiresAt,
-            });
-
-            Swal.fire({
-                icon: 'success',
-                title: 'Profile Updated',
-                text: 'Your profile has been updated!',
-                confirmButtonColor: '#6366f1'
-            });
-
-            if (imageInputRef.current) imageInputRef.current.value = "";
-
-        } catch (error) {
-            console.error('Profile update error:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Update Failed',
-                text: 'There was an issue updating your profile. Try again later.'
-            });
+            setDbUser({ ...dbUser, ...updated });
+            Swal.fire("Profile Updated!", "Your profile has been updated.", "success");
+        } catch (err) {
+            Swal.fire("Error", err.message || "Profile update failed", "error");
         }
+        setLoading(false);
     };
 
+    // Get recent 3 posts (only for user role)
+    const {
+        data: posts = [],
+        isLoading: postsLoading,
+    } = useQuery({
+        queryKey: ["recent-posts", dbUser?.email],
+        queryFn: () => getRecentPostsByAuthor(dbUser.email),
+        enabled: !!dbUser?.email && dbUser.role === "user",
+        select: (data) => Array.isArray(data) ? data.slice(0, 3) : [],
+    });
+
+    // BADGES
+    const badge =
+        dbUser?.member === "gold"
+            ? BADGE.gold
+            : BADGE.bronze;
+
+    if (!dbUser) return <LoadingSpinner />;
+
     return (
-        <>
-            <div className="w-full bg-base-100 mx-auto p-6 md:p-12">
-                <title>{dbUser.name}</title>
-                <h2 className="text-3xl font-bold text-center mb-6">My Profile</h2>
-                <div className="flex flex-col items-center mb-4">
+        <div className="w-full mx-auto p-6 md:p-12  bg-base-100">
+            <title>{dbUser.name}</title>
+            <h2 className="text-3xl font-bold text-center mb-6">My Profile</h2>
+            <div className="flex flex-col items-center mb-6">
+                <div className="relative">
                     <img
-                        src={imagePreview}
+                        src={imagePreview || "https://i.ibb.co/FzR8HMC/avatar-placeholder.png"}
                         alt="Profile"
                         className="w-24 h-24 rounded-full shadow mb-2 object-cover"
                     />
-                    <p className="text-xl font-bold">{dbUser?.name}</p>
-                    <p className="text-lg font-medium">{dbUser?.email}</p>
-                    <div className="flex items-center gap-4 mt-2">
-                        {isGold ? (
-                            <span className="badge badge-outline badge-warning text-lg flex items-center gap-1">
-                                <FaMedal className="text-yellow-300" /> Gold
-                            </span>
-                        ) : <span className="badge badge-outline badge-primary text-lg flex items-center gap-1">
-                            <FaMedal className="text-yellow-800" /> Bronze
-                        </span>}
-                    </div>
+                    <label className="absolute bottom-0 right-0 cursor-pointer">
+                        <input
+                            type="file"
+                            className="hidden"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            disabled={uploading}
+                        />
+                        <span className="inline-block bg-primary text-white rounded-full p-1 text-xs shadow">
+                            {uploading ? "..." : "✎"}
+                        </span>
+                    </label>
                 </div>
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <p className="text-xl font-bold mt-1">{dbUser?.name}</p>
+                <p className="text-lg font-medium">{dbUser?.email}</p>
+                {/* BADGES */}
+                {dbUser.role === "user" ? <div className="flex items-center gap-2 mt-2">
+                    <span className={`px-3 py-1 rounded-full text-xs  ${badge.color} flex items-center gap-1`}>
+                        <span>{badge.icon}</span> {badge.label} Member
+                    </span>
+                </div> : <div className="flex items-center gap-2 mt-2">
+                    <span className={`px-3 py-1 rounded-full  bg-green-400 flex items-center gap-1`}>
+                        {dbUser.role}
+                    </span>
+                </div>}
+
+            </div>
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mb-8">
+                <div>
+                    <label className="block font-semibold mb-1">Name</label>
                     <input
-                        type="text"
-                        placeholder="Your Name"
-                        {...register("name", { required: true, minLength: 3 })}
+                        {...register("name", { required: true, minLength: 2 })}
                         className="input input-bordered w-full"
+                        placeholder="Your Name"
+                        disabled={loading}
                     />
-                    {errors.name && <p className="text-error">Name is required (min 3 characters).</p>}
-
-                    {/* Hidden actual photo URL input */}
-                    <input type="hidden" {...register("photo")} />
-
-                    {/* Image upload */}
+                    {errors.name && <span className="text-error text-xs">Name is required (min 2 chars).</span>}
+                </div>
+                <div>
+                    <label className="block font-semibold mb-1">Photo URL</label>
                     <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        ref={imageInputRef}
-                        className="file-input file-input-bordered w-full"
-                        disabled={uploading}
+                        {...register("photo", { required: true })}
+                        className="input input-bordered w-full"
+                        placeholder="Profile photo URL"
+                        disabled={loading}
                     />
-                    {uploading && <span className="loading loading-spinner loading-xs text-primary"></span>}
-
+                </div>
+                <div>
+                    <label className="block font-semibold mb-1">About Me</label>
                     <textarea
-                        placeholder="About Me"
                         {...register("about")}
                         className="textarea textarea-bordered w-full"
-                        rows={4}
+                        placeholder="Write something about you..."
+                        rows={3}
+                        disabled={loading}
                     />
-
-                    <button type="submit" className="btn btn-primary w-full" disabled={isSubmitting || uploading}>
-                        {isSubmitting ? 'Saving...' : 'Save Changes'}
-                    </button>
-                </form>
-
-                {/* Static recent post */}
-                <div className="mt-10">
-                    <h3 className="text-xl font-semibold mb-3">My Recent Post</h3>
-                    <div className="border rounded-lg p-4 shadow">
-                        <h4 className="text-lg font-bold">How to use React Query for fetching data?</h4>
-                        <p className="text-gray-700">A quick guide to using TanStack React Query in your project for robust, easy data-fetching and caching.</p>
-                        <div className="flex justify-between text-xs mt-2">
-                            <span>July 2025</span>
-                            <span>Visibility: Public</span>
-                        </div>
-                    </div>
                 </div>
-            </div>
-        </>
+                <button
+                    type="submit"
+                    className="btn btn-primary w-full"
+                    disabled={loading || uploading}
+                >
+                    {loading ? "Saving..." : "Save Changes"}
+                </button>
+            </form>
 
+            {/* Only for users, show recent posts */}
+            {dbUser.role === "user" && (
+                <div className="mt-10">
+                    <h3 className="text-xl font-semibold mb-3">My Recent Posts</h3>
+                    {postsLoading ? (
+                        <LoadingSpinner />
+                    ) : posts.length === 0 ? (
+                        <div className="text-gray-400 text-sm">No posts yet.</div>
+                    ) : (
+                        <div className="grid gap-4">
+                            {posts.map((post) => (
+                                <div
+                                    key={post._id}
+                                    className="border p-4 shadow-md hover:shadow-xl transition cursor-pointer bg-base-200 border-gray-200 rounded-2xl flex flex-col sm:flex-row gap-4"
+                                    onClick={() => navigate(`/posts/${post._id}`)}
+                                    tabIndex={0}
+                                >
+                                    <img
+                                        src={post.authorPhoto || "https://i.ibb.co/FzR8HMC/avatar-placeholder.png"}
+                                        alt="Author"
+                                        className="w-12 h-12 rounded-full object-cover mr-2"
+                                    />
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <span className="font-semibold">{post.authorName}</span>
+                                            <span className="text-xs text-gray-400">{post.tag}</span>
+                                            {post.public
+                                                ? <span className="badge badge-success badge-sm ml-2">Public</span>
+                                                : <span className="badge badge-warning badge-sm ml-2">Private</span>}
+                                        </div>
+                                        <div className="text-lg font-bold mb-1">{post.title}</div>
+                                        <div className="text-gray-700 text-sm mb-2">
+                                            {post.content.length > 80 ? (
+                                                <>
+                                                    {post.content.slice(0, 80)}...
+                                                    <button
+                                                        onClick={e => {
+                                                            e.stopPropagation();
+                                                            navigate(`/posts/${post._id}`);
+                                                        }}
+                                                        className="ml-1 link text-primary text-xs"
+                                                    >
+                                                        See more
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                post.content
+                                            )}
+                                        </div>
+                                        <div className="flex gap-4 text-xs text-gray-500 items-center">
+                                            <span>
+                                                {new Date(post.createdAt).toLocaleString(undefined, {
+                                                    month: "short",
+                                                    day: "numeric",
+                                                    year: "numeric",
+                                                })}
+                                            </span>
+                                            <span>💬 {post.commentCount || 0}</span>
+                                            <span>⬆️ {post.upvotes || 0}</span>
+                                            <span>
+                                                🔢 {((post.upvotes || 0) - (post.downvotes || 0)) || 0} votes
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
     );
 };
 

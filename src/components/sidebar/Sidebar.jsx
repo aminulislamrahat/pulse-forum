@@ -138,7 +138,7 @@ const Sidebar = ({ handleLogout }) => {
                                 }
                             >💳 Payment History</NavLink>
                             <NavLink
-                                to="/my-posts"
+                                to="/dashboard/my-posts"
                                 className={({ isActive }) =>
                                     isActive
                                         ? "text-primary text-xl font-semibold border-b border-primary pb-1"
@@ -146,7 +146,7 @@ const Sidebar = ({ handleLogout }) => {
                                 }
                             >📝 My Posts</NavLink>
                             <NavLink
-                                to="/create-post"
+                                to="/dashboard/add-post"
                                 className={({ isActive }) =>
                                     isActive
                                         ? "text-primary text-xl font-semibold border-b border-primary pb-1"
