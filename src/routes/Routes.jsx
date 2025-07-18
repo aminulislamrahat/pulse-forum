@@ -29,6 +29,7 @@ import MyPosts from "../components/posts/MyPosts";
 import EditPost from "../components/posts/EditPost";
 import CommentsPage from "../components/comment/CommentsPage";
 import PostDetails from "../components/posts/PostDetails";
+import AnnouncementManagement from "../components/announcement/AnnouncementManagement";
 
 export const Routes = createBrowserRouter([
     {
@@ -128,6 +129,10 @@ export const Routes = createBrowserRouter([
                 path: "/my-posts",
                 element: <PrivateRoute> <MyPosts /> </PrivateRoute>
             },
+            {
+                path: "/announcements",
+                element: <PrivateRoute> <AnnouncementManagement /> </PrivateRoute>
+            },
 
             {
                 path: "/edit-post/",
@@ -177,6 +182,7 @@ export const Routes = createBrowserRouter([
             { path: "membership", element: <MembershipPage /> },
             { path: "add-post", element: <AddPost /> },
             { path: "my-posts", element: <MyPosts /> },
+            { path: "announcements", element: <AnnouncementManagement /> },
             {
                 path: "edit-post",
                 children: [

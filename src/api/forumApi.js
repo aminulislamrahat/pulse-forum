@@ -225,16 +225,31 @@ const useForumAPI = () => {
 
   // ----- ANNOUNCEMENTS -----
   // Create
-  const createAnnouncement = async ({ title, content }) => {
-    const res = await axiosPrivate.post('/announcements', { title, content })
+  const createAnnouncement = async ({
+    title,
+    content,
+    authorName,
+    authorImage
+  }) => {
+    const res = await axiosPrivate.post('/announcements', {
+      title,
+      content,
+      authorName,
+      authorImage
+    })
     return res.data
   }
 
   // Update
-  const updateAnnouncement = async (id, { title, content }) => {
+  const updateAnnouncement = async (
+    id,
+    { title, content, authorName, authorImage }
+  ) => {
     const res = await axiosPrivate.patch(`/announcements/${id}`, {
       title,
-      content
+      content,
+      authorName,
+      authorImage
     })
     return res.data
   }

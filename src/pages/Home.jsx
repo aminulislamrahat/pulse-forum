@@ -6,6 +6,8 @@ import NewsletterSection from '../components/homePageComponents/NewsletterSectio
 import GallerySection from '../components/homePageComponents/GallerySection';
 import { useRef, useState } from 'react';
 import PostsSection from '../components/homePageComponents/PostsSection';
+import TagListSection from '../components/homePageComponents/TagListSection';
+import AnnouncementSlider from '../components/homePageComponents/AnnouncementSlider';
 
 export const Home = () => {
     const postsSectionRef = useRef();
@@ -24,13 +26,13 @@ export const Home = () => {
         <>
 
             <BannerSection onSearch={handleSearch} />
-            <AboutUsSection />
-            <RecentTasksSection />
+            <TagListSection />
+            <AnnouncementSlider />
             <div ref={postsSectionRef}>
-                <PostsSection />
+                <PostsSection searchTag={searchTag} onSearch={handleSearch} />
             </div>
 
-            <NewsletterSection />
+
 
 
         </>

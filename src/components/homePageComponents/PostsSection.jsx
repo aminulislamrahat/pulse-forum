@@ -7,9 +7,9 @@ import SearchBar from "../hero/SearchBar";
 import { Fade } from "react-awesome-reveal";
 // If you're reusing
 
-export default function PostsSection() {
-    const { getPublicPosts, logSearchTag } = useForumAPI();
-    const [searchTag, setSearchTag] = useState("");
+export default function PostsSection({ onSearch, searchTag }) {
+    const { getPublicPosts } = useForumAPI();
+
     const [sort, setSort] = useState("recent");
     const [page, setPage] = useState(1);
 
@@ -27,12 +27,7 @@ export default function PostsSection() {
     });
 
     // Handle search submit from SearchBar
-    const handleSearch = async (tag) => {
-        setSearchTag(tag);
-        setPage(1);
-        // Optionally log search
-        if (tag) await logSearchTag(tag);
-    };
+
 
     return (
         <section className="w-full mx-auto py-10 px-4 md:px-10 lg:px-36">
@@ -49,7 +44,7 @@ export default function PostsSection() {
                     </div>
                 </Fade>
                 <div className="w-8/12 mx-auto mb-8">
-                    <SearchBar onSearch={handleSearch} badgeColor="badge-primary" />
+                    <SearchBar onSearch={onSearch} badgeColor="badge-primary" />
                 </div>
                 {/* Sort */}
                 <div className="flex w-10/12 mx-auto items-center justify-between mb-4">

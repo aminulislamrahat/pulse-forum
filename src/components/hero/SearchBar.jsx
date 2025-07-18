@@ -35,7 +35,12 @@ export default function SearchBar({ onSearch, badgeColor }) {
         setTagNotFound(false);
 
         const query = search.trim().toLowerCase();
-        if (!query) return;
+        if (!query) {
+
+            onSearch(query);
+            refetch();
+            return
+        };
 
         if (!allTags.includes(query)) {
             setTagNotFound(true);

@@ -6,7 +6,7 @@ import SearchBar from "./SearchBar";
 export default function BannerSection({ onSearch }) {
     return (
         <div
-            className="w-full flex flex-col items-center justify-center  py-32 sm:py-40  bg-cover bg-center px-4 mb-8  shadow-md"
+            className="w-full flex flex-col items-center justify-center  py-32 sm:py-40 lg:py-52 bg-cover bg-center px-4 mb-8  shadow-md"
             style={{ backgroundImage: `url(${bannerBg})` }}
         >
             {/* Gradient overlay for readability */}

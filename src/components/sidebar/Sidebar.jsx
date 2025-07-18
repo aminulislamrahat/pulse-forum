@@ -60,7 +60,7 @@ const Sidebar = ({ handleLogout }) => {
                                 }
                             >🏷️ Manage Tags</NavLink>
                             <NavLink
-                                to="/announcements"
+                                to="/dashboard/announcements"
                                 className={({ isActive }) =>
                                     isActive
                                         ? "text-primary text-xl font-semibold border-b border-primary pb-1"
