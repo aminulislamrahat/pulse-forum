@@ -1,32 +1,25 @@
-import React from 'react';
-import Lottie from 'lottie-react';
-import socialAnimation from '../../assets/social-animation.json'; // replace with actual Lottie JSON path
-import { Link } from 'react-router';
+import React from "react";
+import bannerBg from '../../assets/b1.jpg';
+import SearchBar from "./SearchBar";
 
-const BannerSection = () => {
+
+export default function BannerSection({ onSearch }) {
     return (
-        <section className="bg-base-200 py-20 lg:py-0 px-6 md:px-12 lg:px-24 flex flex-col lg:flex-row items-center justify-between gap-10">
-            {/* Left: Animation */}
-            <div className="w-full lg:w-1/2">
-                <Lottie animationData={socialAnimation} loop={true} />
-            </div>
-
-            {/* Right: Text Content */}
-            <div className="w-full lg:w-1/2 space-y-6 text-center lg:text-left">
-                <h1 className="text-4xl md:text-5xl font-bold leading-snug">
-                    Promote & Join Local <span className="text-primary">Social Events</span>
-                </h1>
-                <p className="text-base-content text-lg">
-                    Take part in meaningful community actions like cleanups, tree plantations, donation drives, and more.
-                    Create or join events to make your city a better place.
+        <div
+            className="w-full flex flex-col items-center justify-center  py-32 sm:py-40  bg-cover bg-center px-4 mb-8  shadow-md"
+            style={{ backgroundImage: `url(${bannerBg})` }}
+        >
+            {/* Gradient overlay for readability */}
+            {/* <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-0"></div> */}
+            <div className="relative z-10 flex flex-col items-center w-full px-4">
+                <h1 className="text-4xl md:text-5xl font-extrabold mb-2 text-white drop-shadow-lg">Pulse Forum</h1>
+                <p className="max-w-2xl text-center text-lg md:text-xl text-gray-200 mb-8 drop-shadow">
+                    Welcome to Pulse Forum, your hub for open discussion, sharing knowledge, and connecting with a vibrant community. Search for topics or tags and join the conversation!
                 </p>
-                <div>
-                    <Link to="/all-events" className="btn btn-primary mr-4">Explore Events</Link>
-                    <Link to="/add-event" className="btn btn-outline btn-primary">Create Event</Link>
+                <div className="w-full max-w-xl">
+                    <SearchBar onSearch={onSearch} badgeColor="badge-info" />
                 </div>
             </div>
-        </section>
+        </div>
     );
-};
-
-export default BannerSection;
+}

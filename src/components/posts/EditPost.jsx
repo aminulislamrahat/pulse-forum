@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 export default function EditPost() {
     const { dbUser } = useContext(AuthContext);
     const { id } = useParams();
-    const { getPostById, updatePost } = useForumAPI();
+    const { getPostWithComments, updatePost } = useForumAPI();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const location = useLocation();
@@ -19,7 +19,7 @@ export default function EditPost() {
     // Fetch post data
     const { data: postData, isLoading } = useQuery({
         queryKey: ["post", id],
-        queryFn: () => getPostById(id),
+        queryFn: () => getPostWithComments(id),
         enabled: !!id,
     });
 

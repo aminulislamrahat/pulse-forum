@@ -15,9 +15,9 @@ const useForumAPI = () => {
   }
 
   // Get public posts (for homepage, with tag search, pagination)
-  const getPublicPosts = async ({ page = 1, limit = 5, search = '' }) => {
+  const getPublicPosts = async ({ page, limit, search, sort }) => {
     const res = await axiosPublic.get(
-      `/posts/public?page=${page}&limit=${limit}&search=${search}`
+      `/posts/public?page=${page}&limit=${limit}&search=${search}&sort=${sort}`
     )
     return res.data // { posts, total }
   }
@@ -30,10 +30,8 @@ const useForumAPI = () => {
 
   // Get related posts by tag (optionally exclude current post)
   const getRelatedPosts = async (tag, except = '') => {
-    const url = except
-      ? `/posts/related/${tag}?except=${except}`
-      : `/posts/related/${tag}`
-    const res = await axiosPublic.get(url)
+    const url = `/posts/related/${tag}`
+    const res = await axiosPublic.get(url, { params: { except } })
     return res.data
   }
 
@@ -49,12 +47,6 @@ const useForumAPI = () => {
     // GET /searches/popular
     const res = await axiosPublic.get('/searches/popular')
     return res.data // Array of { tag, count, lastSearched }
-  }
-
-  // Get post by ID
-  const getPostById = async id => {
-    const res = await axiosPublic.get(`/posts/${id}`)
-    return res.data
   }
 
   //Private APIs
@@ -327,7 +319,6 @@ const useForumAPI = () => {
     markNotificationRead,
     logSearchTag,
     getPopularSearchTags,
-    getPostById,
     getUnreadNotificationCount
   }
 }

@@ -17,7 +17,7 @@ const REPORT_REASONS = [
 
 export default function CommentsPage() {
     const { dbUser } = useContext(AuthContext);
-    const { getPostById, reportComment } = useForumAPI();
+    const { getPostWithComments, reportComment } = useForumAPI();
     const { id: postId } = useParams();
     const [expandedComment, setExpandedComment] = useState(null);
     const [selectedReasons, setSelectedReasons] = useState({});
@@ -26,7 +26,7 @@ export default function CommentsPage() {
     // Fetch post (includes comments)
     const { data: postData, isLoading } = useQuery({
         queryKey: ["post", postId],
-        queryFn: () => getPostById(postId),
+        queryFn: () => getPostWithComments(postId),
         enabled: !!postId,
     });
 

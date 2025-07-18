@@ -13,11 +13,13 @@ const BADGE = {
         label: "Bronze",
         color: "bg-yellow-800",
         icon: "🥉",
+        textColor: "text-white"
     },
     gold: {
         label: "Gold",
         color: "bg-yellow-300",
         icon: "🥇",
+        textColor: "text-black"
     },
 };
 
@@ -132,7 +134,7 @@ const MyProfile = () => {
                 <p className="text-lg font-medium">{dbUser?.email}</p>
                 {/* BADGES */}
                 {dbUser.role === "user" ? <div className="flex items-center gap-2 mt-2">
-                    <span className={`px-3 py-1 rounded-full text-xs  ${badge.color} flex items-center gap-1`}>
+                    <span className={`px-3 py-1 rounded-full text-xs ${badge.textColor}  ${badge.color} flex items-center gap-1`}>
                         <span>{badge.icon}</span> {badge.label} Member
                     </span>
                 </div> : <div className="flex items-center gap-2 mt-2">

@@ -10,6 +10,7 @@ import { FaRegCommentDots, FaRegEdit, FaRegTrashAlt, FaExclamationTriangle, FaSh
 import { MdSend } from "react-icons/md";
 import { formatDistanceToNow, format } from "date-fns";
 import { FacebookShareButton, TwitterShareButton, WhatsappShareButton, FacebookIcon, TwitterIcon, WhatsappIcon } from "react-share";
+import RelatedPosts from "./RelatedPosts";
 
 const REPORT_REASONS = [
     "Spam",
@@ -225,7 +226,7 @@ export default function PostDetails() {
     const shareUrl = window.location.href;
 
     return (
-        <div className="max-w-2xl mx-auto p-6 bg-base-100 rounded-xl shadow-md mt-8 mb-20">
+        <div className="max-w-5xl mx-auto p-6 md:p-12 bg-base-100 rounded-xl shadow-md mt-8 mb-20">
             {/* Post Info */}
             <div className="mb-6">
                 <div className="flex items-center gap-3 mb-2">
@@ -246,8 +247,8 @@ export default function PostDetails() {
 
                 </div>
                 <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
-                <div className="flex gap-2 text-xs mb-2">
-                    <span className="badge badge-outline">{post.tag}</span>
+                <div className="flex gap-2 items-center text-xs mb-2">
+                    <span className="badge badge-outline badge-primary">{post.tag}</span>
                     <span className="text-gray-400">{format(new Date(post.createdAt), "PPP")}</span>
                 </div>
                 <div className="mb-3 text-gray-800">{post.content}</div>
@@ -370,6 +371,8 @@ export default function PostDetails() {
                     </div>
                 )}
             </div>
+
+            <RelatedPosts tag={post.tag} excludeId={post._id} />
         </div>
     );
 }
