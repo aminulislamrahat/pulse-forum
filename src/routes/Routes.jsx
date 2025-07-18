@@ -30,6 +30,8 @@ import EditPost from "../components/posts/EditPost";
 import CommentsPage from "../components/comment/CommentsPage";
 import PostDetails from "../components/posts/PostDetails";
 import AnnouncementManagement from "../components/announcement/AnnouncementManagement";
+import AdminManagePosts from "../components/posts/AdminManagePosts";
+import AdminReportedComments from "../components/comment/AdminReportedComments";
 
 export const Routes = createBrowserRouter([
     {
@@ -133,6 +135,14 @@ export const Routes = createBrowserRouter([
                 path: "/announcements",
                 element: <PrivateRoute> <AnnouncementManagement /> </PrivateRoute>
             },
+            {
+                path: "/manage-posts",
+                element: <PrivateRoute> <AdminManagePosts /> </PrivateRoute>
+            },
+            {
+                path: "/reports",
+                element: <PrivateRoute> <AdminReportedComments /> </PrivateRoute>
+            },
 
             {
                 path: "/edit-post/",
@@ -183,6 +193,8 @@ export const Routes = createBrowserRouter([
             { path: "add-post", element: <AddPost /> },
             { path: "my-posts", element: <MyPosts /> },
             { path: "announcements", element: <AnnouncementManagement /> },
+            { path: "manage-posts", element: <AdminManagePosts /> },
+            { path: "reports", element: <AdminReportedComments /> },
             {
                 path: "edit-post",
                 children: [

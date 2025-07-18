@@ -51,8 +51,9 @@ const MyPayments = () => {
                     onChange={e => { setSearch(e.target.value); setPage(1); }}
                     className="input input-bordered max-w-xs"
                 />
-                {(isLoading || isFetching) && <LoadingSpinner size="sm" />}
+
             </div>
+            {(isLoading || isFetching) && <LoadingSpinner size="sm" />}
             <div className="overflow-x-auto">
                 <table className="table w-full">
                     <thead>

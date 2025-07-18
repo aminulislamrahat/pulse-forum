@@ -12,7 +12,7 @@ import { AuthContext } from "../../provider/AuthProvider";
 const MembersList = () => {
     const { dbUser } = useContext(AuthContext);
     const isSuperAdmin = dbUser?.role === "super-admin";
-    const isAdmin = dbUser?.role === "admin";
+
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
 
@@ -80,8 +80,9 @@ const MembersList = () => {
                         onChange={e => { setSearch(e.target.value); setPage(1); }}
                         className="input input-bordered max-w-xs"
                     />
-                    {(isLoading || isFetching) && <LoadingSpinner size="sm" />}
+
                 </div>
+                {(isLoading || isFetching) && <LoadingSpinner size="sm" />}
                 {/* Desktop Table */}
                 <div className="overflow-x-auto hidden md:block">
                     <table className="table w-full">

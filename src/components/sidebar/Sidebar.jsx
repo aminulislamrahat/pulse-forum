@@ -44,7 +44,7 @@ const Sidebar = ({ handleLogout }) => {
                                 }
                             >👥 Manage Members</NavLink>
                             <NavLink
-                                to="/manage-posts"
+                                to="/dashboard/manage-posts"
                                 className={({ isActive }) =>
                                     isActive
                                         ? "text-primary text-xl font-semibold border-b border-primary pb-1"
@@ -68,7 +68,7 @@ const Sidebar = ({ handleLogout }) => {
                                 }
                             >📢 Announcements</NavLink>
                             <NavLink
-                                to="/reports"
+                                to="/dashboard/reports"
                                 className={({ isActive }) =>
                                     isActive
                                         ? "text-primary text-xl font-semibold border-b border-primary pb-1"
