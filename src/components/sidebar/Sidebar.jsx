@@ -84,7 +84,7 @@ const Sidebar = ({ handleLogout }) => {
                                 }
                             >📈 All Payments</NavLink>
                             <NavLink
-                                to="/notifications"
+                                to="/dashboard/notifications"
                                 className={({ isActive }) =>
                                     isActive
                                         ? "text-primary text-xl font-semibold border-b border-primary pb-1"
@@ -105,14 +105,7 @@ const Sidebar = ({ handleLogout }) => {
                                         : "hover:text-primary text-xl"
                                 }
                             >🏠 Dashboard</NavLink>
-                            <NavLink
-                                to="/forum"
-                                className={({ isActive }) =>
-                                    isActive
-                                        ? "text-primary text-xl font-semibold border-b border-primary pb-1"
-                                        : "hover:text-primary text-xl"
-                                }
-                            >💬 Forum Home</NavLink>
+
                             <NavLink
                                 to="/dashboard/my-profile"
                                 className={({ isActive }) =>
@@ -155,7 +148,7 @@ const Sidebar = ({ handleLogout }) => {
                             >➕ Create Post</NavLink>
 
                             <NavLink
-                                to="/notifications"
+                                to="/dashboard/notifications"
                                 className={({ isActive }) =>
                                     isActive
                                         ? "text-primary text-xl font-semibold border-b border-primary pb-1"

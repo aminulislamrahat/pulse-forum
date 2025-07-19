@@ -290,6 +290,17 @@ const useForumAPI = () => {
     const res = await axiosPrivate.get('/notifications/unread/count')
     return res.data.count // returns { count }
   }
+  //get dashboard stats
+  const getPlatformStats = async () => {
+    const res = await axiosPrivate.get('/stats/overview')
+    return res.data // { users, posts, tags, comments }
+  }
+
+  //get user dashboard stat
+  const getUserStats = async () => {
+    const res = await axiosPrivate.get('/stats/user')
+    return res.data // { posts, comments, upvotesGiven, downvotesGiven }
+  }
 
   return {
     getUserByEmail,
@@ -334,6 +345,8 @@ const useForumAPI = () => {
     markNotificationRead,
     logSearchTag,
     getPopularSearchTags,
+    getPlatformStats,
+    getUserStats,
     getUnreadNotificationCount
   }
 }

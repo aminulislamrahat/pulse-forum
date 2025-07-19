@@ -32,6 +32,10 @@ import PostDetails from "../components/posts/PostDetails";
 import AnnouncementManagement from "../components/announcement/AnnouncementManagement";
 import AdminManagePosts from "../components/posts/AdminManagePosts";
 import AdminReportedComments from "../components/comment/AdminReportedComments";
+import NotificationPage from "../components/notification/NotificationPage";
+import AdminProfile from "../components/dashboard/AdminProfile";
+import UserDashboard from "../components/dashboard/UserDashboard";
+import Dashboard from "../components/dashboard/Dashboard";
 
 export const Routes = createBrowserRouter([
     {
@@ -143,6 +147,10 @@ export const Routes = createBrowserRouter([
                 path: "/reports",
                 element: <PrivateRoute> <AdminReportedComments /> </PrivateRoute>
             },
+            {
+                path: "/notifications",
+                element: <PrivateRoute> <NotificationPage /> </PrivateRoute>
+            },
 
             {
                 path: "/edit-post/",
@@ -183,7 +191,7 @@ export const Routes = createBrowserRouter([
         path: "/dashboard",
         element: <PrivateRoute><DashboardLayout /></PrivateRoute>,
         children: [
-            { index: true, element: <MembershipPage /> },
+            { index: true, element: <Dashboard /> },
             { path: "my-profile", element: <MyProfile /> },
             { path: "manage-users", element: <MembersList /> },
             { path: "all-payments", element: <AllPayments /> },
@@ -195,6 +203,7 @@ export const Routes = createBrowserRouter([
             { path: "announcements", element: <AnnouncementManagement /> },
             { path: "manage-posts", element: <AdminManagePosts /> },
             { path: "reports", element: <AdminReportedComments /> },
+            { path: "notifications", element: <NotificationPage /> },
             {
                 path: "edit-post",
                 children: [

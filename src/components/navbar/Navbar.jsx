@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 
-import { FaBars, FaBell, FaTimes } from 'react-icons/fa'
+import { FaBars, FaTimes } from 'react-icons/fa'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router'
 import { AuthContext } from '../../provider/AuthProvider'
 import Swal from 'sweetalert2'
 import { MembershipContext } from '../../provider/MembershipProvider'
+import NotificationBell from './NotificationBell'
+import NotificationDropdown from './NotificationDropdown'
 
 export default function Navbar() {
     const { user, logOut, dbUser } = useContext(AuthContext)
@@ -96,49 +98,12 @@ export default function Navbar() {
 
                 {/* Mobile Hamburger */}
                 <div className='md:hidden flex items-center space-x-3'>
-                    <label className='toggle text-base-content'>
-                        <input type='checkbox' value='luxury' className='theme-controller' />
 
-                        <svg
-                            aria-label='sun'
-                            xmlns='http://www.w3.org/2000/svg'
-                            viewBox='0 0 24 24'
-                        >
-                            <g
-                                strokeLinejoin='round'
-                                strokeLinecap='round'
-                                strokeWidth='2'
-                                fill='none'
-                                stroke='currentColor'
-                            >
-                                <circle cx='12' cy='12' r='4'></circle>
-                                <path d='M12 2v2'></path>
-                                <path d='M12 20v2'></path>
-                                <path d='m4.93 4.93 1.41 1.41'></path>
-                                <path d='m17.66 17.66 1.41 1.41'></path>
-                                <path d='M2 12h2'></path>
-                                <path d='M20 12h2'></path>
-                                <path d='m6.34 17.66-1.41 1.41'></path>
-                                <path d='m19.07 4.93-1.41 1.41'></path>
-                            </g>
-                        </svg>
-
-                        <svg
-                            aria-label='moon'
-                            xmlns='http://www.w3.org/2000/svg'
-                            viewBox='0 0 24 24'
-                        >
-                            <g
-                                strokeLinejoin='round'
-                                strokeLinecap='round'
-                                strokeWidth='2'
-                                fill='none'
-                                stroke='currentColor'
-                            >
-                                <path d='M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z'></path>
-                            </g>
-                        </svg>
-                    </label>
+                    {user ? (
+                        <><div className="dropdown dropdown-end">
+                            <NotificationBell />
+                            <NotificationDropdown />
+                        </div></>) : null}
                     <button
                         onClick={() => setMenuOpen(!menuOpen)}
                         className='text-primary focus:outline-none cursor-pointer'
@@ -153,27 +118,8 @@ export default function Navbar() {
                         <>
 
                             <div className="dropdown dropdown-end">
-                                <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
-                                    <div className="indicator">
-                                        <FaBell size={24} />
-                                        <span className="badge badge-sm indicator-item bg-red-700 text-white">8</span>
-                                    </div>
-                                </div>
-                                <ul
-                                    tabIndex={0}
-                                    className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                                    <li>
-                                        <div>notification 2</div>
-                                    </li>
-                                    <li>
-                                        <div>notification 2</div>
-                                    </li>
-
-                                    <li>
-                                        <div className='mx-auto text-primary'>See All</div>
-                                    </li>
-
-                                </ul>
+                                <NotificationBell />
+                                <NotificationDropdown />
                             </div>
 
                             <div className='dropdown dropdown-end ml-2'>
@@ -193,7 +139,7 @@ export default function Navbar() {
                                 {/* Dropdown */}
                                 <ul
                                     tabIndex={0}
-                                    className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+                                    className="menu menu-sm dropdown-content bg-base-100 rounded-lg z-1 mt-3 w-52 p-2 shadow"
                                 >
                                     <li>
                                         <div>{dbUser?.name}</div>
@@ -217,49 +163,7 @@ export default function Navbar() {
                         </Link>
                     )}
 
-                    <label className='toggle text-base-content'>
-                        <input type='checkbox' value='luxury' className='theme-controller' />
 
-                        <svg
-                            aria-label='sun'
-                            xmlns='http://www.w3.org/2000/svg'
-                            viewBox='0 0 24 24'
-                        >
-                            <g
-                                strokeLinejoin='round'
-                                strokeLinecap='round'
-                                strokeWidth='2'
-                                fill='none'
-                                stroke='currentColor'
-                            >
-                                <circle cx='12' cy='12' r='4'></circle>
-                                <path d='M12 2v2'></path>
-                                <path d='M12 20v2'></path>
-                                <path d='m4.93 4.93 1.41 1.41'></path>
-                                <path d='m17.66 17.66 1.41 1.41'></path>
-                                <path d='M2 12h2'></path>
-                                <path d='M20 12h2'></path>
-                                <path d='m6.34 17.66-1.41 1.41'></path>
-                                <path d='m19.07 4.93-1.41 1.41'></path>
-                            </g>
-                        </svg>
-
-                        <svg
-                            aria-label='moon'
-                            xmlns='http://www.w3.org/2000/svg'
-                            viewBox='0 0 24 24'
-                        >
-                            <g
-                                strokeLinejoin='round'
-                                strokeLinecap='round'
-                                strokeWidth='2'
-                                fill='none'
-                                stroke='currentColor'
-                            >
-                                <path d='M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z'></path>
-                            </g>
-                        </svg>
-                    </label>
                 </div>
             </div>
 
