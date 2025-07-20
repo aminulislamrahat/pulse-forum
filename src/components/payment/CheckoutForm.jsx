@@ -53,7 +53,7 @@ export default function CheckoutForm({ amount, onSuccess }) {
             Swal.fire("Payment failed", result.error.message, "error");
         } else if (result.paymentIntent.status === "succeeded") {
             // 3. Save payment in DB
-            console.log("payment res", result)
+            // console.log("payment res", result)
             const last4 = paymentMethod.card.last4;
             await savePayment({
                 paymentId: result.paymentIntent.id,

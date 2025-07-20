@@ -30,7 +30,7 @@ export const Login = () => {
                 photo: firebaseUser.photoURL,
             });
         } catch (e) {
-            console.log(e)
+            console.error(e)
         }
     };
 

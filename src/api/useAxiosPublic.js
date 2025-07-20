@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const axiosPublic = axios.create({
-  // baseURL: 'https://social-event-server.vercel.app'
-  baseURL: 'http://localhost:3000'
+  baseURL: 'https://b11a12-server-side-aminulislamrahat.vercel.app'
+  //baseURL: 'http://localhost:3000'
 })
 
 const useAxiosPublic = () => {

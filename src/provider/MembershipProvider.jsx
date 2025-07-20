@@ -30,7 +30,7 @@ export const MembershipProvider = ({ children }) => {
             setDbUser(updatedUser);
             return updatedUser?.member || "bronze";
         } catch (err) {
-            console.log(err);
+            console.error(err);
             return "bronze";
         }
     };

@@ -33,7 +33,7 @@ export default function CommentsPage() {
     if (isLoading || !dbUser) return <LoadingSpinner />;
     const post = postData?.post;
     const comments = postData?.postComments || [];
-    console.log("post data", comments)
+    // console.log("post data", comments)
     // Only post owner can report
     const canReport = dbUser?.email === post?.authorEmail;
 
