@@ -10,8 +10,8 @@ const Footer = () => {
                 <aside>
                     <Link className="flex items-center gap-3 font-bold text-xl text-primary">
                         <img
-                            src={`${import.meta.env.BASE_URL}event_logo.png`}
-                            alt="CommunityAct Logo"
+                            src={`${import.meta.env.BASE_URL}pulse-logo.png`}
+                            alt="Pulse Forum Logo"
                             className="w-full"
                         />
 
@@ -71,10 +71,10 @@ const Footer = () => {
                         📞 +880-1234-567890
                     </a>
                     <a
-                        href="mailto:info@CommunityAct.io"
+                        href="mailto:info@pulseforum.io"
                         className="block text-xl hover:text-primary cursor-pointer"
                     >
-                        ✉️ info@CommunityAct.io
+                        ✉️ info@pulseforum.io
                     </a>
                 </div>
 
@@ -119,7 +119,7 @@ const Footer = () => {
             </div>
 
             <div className="text-center text-xs text-gray-500 mt-10">
-                © {new Date().getFullYear()} CommunityAct. All rights reserved.
+                © {new Date().getFullYear()} Pulse Forum. All rights reserved.
             </div>
         </footer>
     );

@@ -39,7 +39,7 @@ export default function Navbar() {
                 {/* Logo */}
                 <NavLink to='/' className='navbar-start flex items-center'>
                     <img
-                        src={`${import.meta.env.BASE_URL}event_logo.png`}
+                        src={`${import.meta.env.BASE_URL}pulse-logo.png`}
                         alt='logo'
                         className='h-10 cursor-pointer'
                     />

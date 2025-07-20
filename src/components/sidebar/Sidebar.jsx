@@ -12,7 +12,7 @@ const Sidebar = ({ handleLogout }) => {
             {/* Logo section */}
             <div>
                 <Link to="/" className="block mb-6 text-xl font-bold text-primary hover:opacity-80">
-                    <img src={`${import.meta.env.BASE_URL}dotask_logo.png`} alt="Logo" className="h-10" />
+                    <img src={`${import.meta.env.BASE_URL}pulse-logo.png`} alt="Logo" className="h-10" />
                 </Link>
                 <nav className="flex flex-col gap-4 text-sm">
 
@@ -20,7 +20,7 @@ const Sidebar = ({ handleLogout }) => {
                     {(role === "admin" || role === "super-admin") && (
                         <>
                             <NavLink
-                                to="/admin-profile"
+                                to="/dashboard"
                                 className={({ isActive }) =>
                                     isActive
                                         ? "text-primary text-xl font-semibold border-b border-primary pb-1"

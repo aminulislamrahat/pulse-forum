@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules"
 import "swiper/css";
 import useForumAPI from "../../api/forumApi";
 import LoadingSpinner from "../LoadingSpinner";
@@ -21,11 +22,12 @@ export default function AnnouncementSlider() {
 
     return (
         <section className="w-full mx-auto py-10 px-4 md:px-10 lg:px-36">
-            <div className="lg:p-12 w-full mx-auto rounded-2xl bg-base-200 shadow-lg p-0 md:p-8 overflow-hidden">
+            <div className="lg:p-12 w-full mx-auto rounded-2xl bg-base-200 shadow-lg p-4 md:p-8 ">
                 <h2 className="text-3xl font-bold text-center text-primary mb-6 tracking-wide">
                     Announcements
                 </h2>
                 <Swiper
+                    modules={[Autoplay]}
                     spaceBetween={0}
                     slidesPerView={1}
                     loop

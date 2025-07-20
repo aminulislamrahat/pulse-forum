@@ -1,10 +1,9 @@
 import { Link } from 'react-router';
 import Navbar from '../components/navbar/Navbar';
 import Lottie from 'lottie-react';
-import notFoundAnimation from "../assets/404.json";
+import noAccessAnimation from "../assets/warning.json";
 
-export default function NotFoundPage() {
-
+function ForbiddenPage() {
     return (
         <>
             <Navbar />
@@ -13,16 +12,16 @@ export default function NotFoundPage() {
                 <div className="max-w-xl text-center">
 
                     <p className="mt-4 text-gray-600">
-                        The page you're trying to access is not available or may have been removed.
+                        The page you're trying to access is permittable.
                     </p>
 
                     <div className="mt-8">
                         <div className="w-full flex justify-center">
                             <div className="w-60 lg:w-96">
-                                <Lottie animationData={notFoundAnimation} loop={true} />
+                                <Lottie animationData={noAccessAnimation} loop={true} />
                             </div>
                         </div>
-                        <p className="mt-4 text-gray-500 italic">You are smart, but this page doesn’t exist.</p>
+                        <p className="mt-4 text-gray-500 italic">You are smart, but you can not this page.</p>
                     </div>
 
 
@@ -33,3 +32,5 @@ export default function NotFoundPage() {
 
     );
 }
+
+export default ForbiddenPage

@@ -11,13 +11,8 @@ import PrivacyPolicy from "../components/footer/PrivacyPolicy";
 import PrivateRoute from "../provider/PrivateRoute";
 import ForgotPassword from "../components/ForgotPassword";
 import PublicRoute from "../provider/PublicRoute";
-import ProjectCreate from "../components/projects/ProjectCreate";
-import MyCreatedEvents from "../components/myTask/MyCreatedEvents";
-import ProjectEdit from "../components/projects/ProjectEdit";
-import ProjectDetails from "../components/projects/ProjectDetails";
-import BrowseTaskList from "../components/browseTask/BrowseTaskList";
-import UpcomingEventList from "../components/browseTask/UpcomingEventList";
-import MyJoinedEventList from "../components/myTask/MyJoinedEventList";
+import AdminRoute from "../provider/AdminRoute";
+
 import MembershipPage from "../pages/MembershipPage";
 import DashboardLayout from "../layouts/DashboardLayout ";
 import MembersList from "../components/users/MembersList";
@@ -33,9 +28,11 @@ import AnnouncementManagement from "../components/announcement/AnnouncementManag
 import AdminManagePosts from "../components/posts/AdminManagePosts";
 import AdminReportedComments from "../components/comment/AdminReportedComments";
 import NotificationPage from "../components/notification/NotificationPage";
-import AdminProfile from "../components/dashboard/AdminProfile";
-import UserDashboard from "../components/dashboard/UserDashboard";
+
 import Dashboard from "../components/dashboard/Dashboard";
+import ForbiddenPage from "../pages/ForbidderPage";
+import UserRoute from "../provider/UserRoute";
+
 
 export const Routes = createBrowserRouter([
     {
@@ -61,39 +58,10 @@ export const Routes = createBrowserRouter([
                 element: <PrivateRoute><MyProfile /></PrivateRoute>
 
             },
-            {
-                path: "add-event",
-                element: <PrivateRoute><ProjectCreate /></PrivateRoute>
 
-            },
-            {
-                path: "manage-events",
-                element: <PrivateRoute><MyCreatedEvents /></PrivateRoute>
 
-            },
-            {
-                path: "joined-events",
-                element: <PrivateRoute><MyJoinedEventList /></PrivateRoute>
 
-            },
-            {
-                path: "/event-details/",
-                children: [
 
-                    {
-                        path: ":id",
-                        element: <PrivateRoute><ProjectDetails /></PrivateRoute>
-                    },
-                ],
-            },
-            {
-                path: "edit-event",
-                element: <PrivateRoute><ProjectEdit /></PrivateRoute>
-            },
-            {
-                path: "all-events",
-                Component: UpcomingEventList
-            },
             //new project
             {
                 path: "terms-and-conditions",
@@ -113,39 +81,39 @@ export const Routes = createBrowserRouter([
             },
             {
                 path: "manage-users",
-                element: <PrivateRoute> <MembersList /> </PrivateRoute>
+                element: <PrivateRoute> <AdminRoute> <MembersList /> </AdminRoute> </PrivateRoute>
             },
             {
                 path: "payments",
-                element: <PrivateRoute> <MyPayments /> </PrivateRoute>
+                element: <PrivateRoute> <UserRoute><MyPayments /> </UserRoute>  </PrivateRoute>
             },
             {
                 path: "all-payments",
-                element: <PrivateRoute> <AllPayments /> </PrivateRoute>
+                element: <PrivateRoute> <AdminRoute> <AllPayments /> </AdminRoute> </PrivateRoute>
             },
             {
                 path: "/manage-tags",
-                element: <PrivateRoute> <TagManagement /> </PrivateRoute>
+                element: <PrivateRoute> <AdminRoute> <TagManagement /> </AdminRoute>  </PrivateRoute>
             },
             {
                 path: "/add-post",
-                element: <PrivateRoute> <AddPost /> </PrivateRoute>
+                element: <PrivateRoute> <UserRoute> <AddPost /> </UserRoute> </PrivateRoute>
             },
             {
                 path: "/my-posts",
-                element: <PrivateRoute> <MyPosts /> </PrivateRoute>
+                element: <PrivateRoute> <UserRoute> <MyPosts /> </UserRoute> </PrivateRoute>
             },
             {
                 path: "/announcements",
-                element: <PrivateRoute> <AnnouncementManagement /> </PrivateRoute>
+                element: <PrivateRoute> <AdminRoute> <AnnouncementManagement /> </AdminRoute>  </PrivateRoute>
             },
             {
                 path: "/manage-posts",
-                element: <PrivateRoute> <AdminManagePosts /> </PrivateRoute>
+                element: <PrivateRoute> <AdminRoute><AdminManagePosts /> </AdminRoute>  </PrivateRoute>
             },
             {
                 path: "/reports",
-                element: <PrivateRoute> <AdminReportedComments /> </PrivateRoute>
+                element: <PrivateRoute> <AdminRoute><AdminReportedComments /> </AdminRoute>  </PrivateRoute>
             },
             {
                 path: "/notifications",
@@ -158,7 +126,7 @@ export const Routes = createBrowserRouter([
 
                     {
                         path: ":id",
-                        element: <PrivateRoute><EditPost /></PrivateRoute>
+                        element: <PrivateRoute><UserRoute> <EditPost /> </UserRoute></PrivateRoute>
                     },
                 ],
             },
@@ -168,7 +136,7 @@ export const Routes = createBrowserRouter([
 
                     {
                         path: ":id",
-                        element: <PrivateRoute><CommentsPage /></PrivateRoute>
+                        element: <PrivateRoute><UserRoute><CommentsPage /> </UserRoute> </PrivateRoute>
                     },
                 ],
             },
@@ -193,16 +161,16 @@ export const Routes = createBrowserRouter([
         children: [
             { index: true, element: <Dashboard /> },
             { path: "my-profile", element: <MyProfile /> },
-            { path: "manage-users", element: <MembersList /> },
-            { path: "all-payments", element: <AllPayments /> },
-            { path: "payments", element: <MyPayments /> },
-            { path: "manage-tags", element: <TagManagement /> },
+            { path: "manage-users", element: <AdminRoute><MembersList /> </AdminRoute> },
+            { path: "all-payments", element: <AdminRoute><AllPayments /> </AdminRoute> },
+            { path: "payments", element: <UserRoute> <MyPayments /></UserRoute> },
+            { path: "manage-tags", element: <AdminRoute> <TagManagement /></AdminRoute> },
             { path: "membership", element: <MembershipPage /> },
-            { path: "add-post", element: <AddPost /> },
-            { path: "my-posts", element: <MyPosts /> },
-            { path: "announcements", element: <AnnouncementManagement /> },
-            { path: "manage-posts", element: <AdminManagePosts /> },
-            { path: "reports", element: <AdminReportedComments /> },
+            { path: "add-post", element: <UserRoute><AddPost /> </UserRoute> },
+            { path: "my-posts", element: <UserRoute> <MyPosts /> </UserRoute> },
+            { path: "announcements", element: <AdminRoute><AnnouncementManagement /> </AdminRoute> },
+            { path: "manage-posts", element: <AdminRoute> <AdminManagePosts /></AdminRoute> },
+            { path: "reports", element: <AdminRoute><AdminReportedComments /> </AdminRoute> },
             { path: "notifications", element: <NotificationPage /> },
             {
                 path: "edit-post",
@@ -210,7 +178,7 @@ export const Routes = createBrowserRouter([
 
                     {
                         path: ":id",
-                        element: <EditPost />
+                        element: <UserRoute><EditPost /> </UserRoute>
                     },
                 ],
             },
@@ -220,7 +188,7 @@ export const Routes = createBrowserRouter([
 
                     {
                         path: ":id",
-                        element: <CommentsPage />
+                        element: <UserRoute> <CommentsPage /> </UserRoute>
                     },
                 ],
             },
@@ -235,6 +203,10 @@ export const Routes = createBrowserRouter([
                 ],
             },
         ]
+    },
+    {
+        path: "/no-access",
+        Component: ForbiddenPage
     },
     {
         path: "/*",
