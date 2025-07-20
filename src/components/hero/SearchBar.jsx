@@ -54,10 +54,10 @@ export default function SearchBar({ onSearch, badgeColor }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <div className="flex items-center w-full bg-white rounded-xl shadow px-3 py-2">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+            <div className="flex flex-col xs:flex-row items-stretch w-full bg-white rounded-xl shadow px-2 py-2 gap-2">
                 <input
-                    className="flex-1 text-lg bg-transparent outline-none"
+                    className="flex-1 text-lg bg-transparent outline-none w-full min-w-0"
                     type="text"
                     placeholder="Search by tag..."
                     value={search}
@@ -66,7 +66,10 @@ export default function SearchBar({ onSearch, badgeColor }) {
                         setTagNotFound(false); // reset error on change
                     }}
                 />
-                <button className="btn btn-primary ml-2" type="submit">
+                <button
+                    className="btn btn-primary w-full xs:w-auto"
+                    type="submit"
+                >
                     Search
                 </button>
             </div>
@@ -100,5 +103,6 @@ export default function SearchBar({ onSearch, badgeColor }) {
                 )}
             </div>
         </form>
+
     );
 }

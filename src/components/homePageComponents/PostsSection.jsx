@@ -31,7 +31,7 @@ export default function PostsSection({ onSearch, searchTag }) {
 
     return (
         <section className="w-full mx-auto py-10 px-4 md:px-10 lg:px-36">
-            <div className="w-full mx-auto bg-base-200 rounded-2xl p-6 lg:p-12">
+            <div className="w-full mx-auto bg-base-200 rounded-2xl p-2 lg:p-12">
                 <Fade direction="down" triggerOnce>
                     <div className="text-center mb-14">
                         <h2 className="text-4xl font-bold text-primary mb-4">
