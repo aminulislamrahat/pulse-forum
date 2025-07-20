@@ -98,7 +98,7 @@ export default function AdminProfile() {
             </div>
 
             {/* TAG MANAGEMENT (already built) */}
-            <div className="mt-12 flex justify-between">
+            <div className="mt-12 flex flex-col md:flex-row md:justify-around">
                 <div className="bg-base-300 p-4"> <MyProfile /></div>
                 <div className="bg-base-300 p-4"> <TagManagement /></div>
             </div>

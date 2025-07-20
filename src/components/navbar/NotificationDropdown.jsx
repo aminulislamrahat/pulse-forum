@@ -33,7 +33,8 @@ export default function NotificationDropdown() {
                             onClick={() => {
                                 markRead(n._id);
                                 // Instead of redirecting to link, go to notification page:
-                                navigate("/notifications");
+                                const isMobile = window.innerWidth <= 768;
+                                navigate(isMobile ? "/notifications" : "/dashboard/notifications");
                             }}
                         >
                             {n.text}
@@ -46,7 +47,10 @@ export default function NotificationDropdown() {
                 <button
                     type="button"
                     className="mx-auto text-primary cursor-pointer text-center"
-                    onClick={() => navigate("/notifications")}
+                    onClick={() => {
+                        const isMobile = window.innerWidth <= 768;
+                        navigate(isMobile ? "/notifications" : "/dashboard/notifications");
+                    }}
                 >
                     See All
                 </button>

@@ -5,7 +5,7 @@ import AdminProfile from './AdminProfile';
 
 function Dashboard() {
     const { dbUser } = useContext(AuthContext);
-    if (dbUser.role === "user") { return <UserDashboard /> }
+    if (dbUser?.role === "user") { return <UserDashboard /> }
     else { return <AdminProfile /> }
 }
 

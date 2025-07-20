@@ -177,36 +177,111 @@ export default function Navbar() {
                     >
                         Home
                     </NavLink>
-                    <NavLink
-                        to='/membership'
-                        onClick={() => setMenuOpen(false)}
-                        className='block px-2 py-1 hover:text-primary border-b-2'
-                    >
-                        Membership
-                    </NavLink>
+
                     {user ? (
                         <>
+
+                            {dbUser?.role === "user" ? <>
+
+                                <NavLink
+                                    to='/mobile-dashboard'
+                                    onClick={() => setMenuOpen(false)}
+                                    className='block px-2 py-1 hover:text-primary border-b-2'
+                                >
+                                    Dashboard
+                                </NavLink>
+                                <NavLink
+                                    to='/membership'
+                                    onClick={() => setMenuOpen(false)}
+                                    className='block px-2 py-1 hover:text-primary border-b-2'
+                                >
+                                    Membership
+                                </NavLink>
+                                <NavLink
+                                    to='/payments'
+                                    onClick={() => setMenuOpen(false)}
+                                    className='block px-2 py-1 hover:text-primary border-b-2'
+                                >
+                                    Payment History
+                                </NavLink>
+                                <NavLink
+                                    to='/my-posts'
+                                    onClick={() => setMenuOpen(false)}
+                                    className='block px-2 py-1 hover:text-primary border-b-2'
+                                >
+                                    My Posts
+                                </NavLink>
+                                <NavLink
+                                    to='/add-post'
+                                    onClick={() => setMenuOpen(false)}
+                                    className='block px-2 py-1 hover:text-primary border-b-2'
+                                >
+                                    Create Post
+                                </NavLink>
+                            </>
+                                : <>
+
+                                    <NavLink
+                                        to='/mobile-dashboard'
+                                        onClick={() => setMenuOpen(false)}
+                                        className='block px-2 py-1 hover:text-primary border-b-2'
+                                    >
+                                        Admin Profile
+                                    </NavLink>
+                                    <NavLink
+                                        to='/manage-users'
+                                        onClick={() => setMenuOpen(false)}
+                                        className='block px-2 py-1 hover:text-primary border-b-2'
+                                    >
+                                        Manage Members
+                                    </NavLink>
+                                    <NavLink
+                                        to='/manage-posts'
+                                        onClick={() => setMenuOpen(false)}
+                                        className='block px-2 py-1 hover:text-primary border-b-2'
+                                    >
+                                        Manage Posts
+                                    </NavLink>
+                                    <NavLink
+                                        to='/manage-tags'
+                                        onClick={() => setMenuOpen(false)}
+                                        className='block px-2 py-1 hover:text-primary border-b-2'
+                                    >
+                                        Manage Tags
+                                    </NavLink>
+                                    <NavLink
+                                        to='/announcements'
+                                        onClick={() => setMenuOpen(false)}
+                                        className='block px-2 py-1 hover:text-primary border-b-2'
+                                    >
+                                        Announcements
+                                    </NavLink>
+
+                                    <NavLink
+                                        to='/reports'
+                                        onClick={() => setMenuOpen(false)}
+                                        className='block px-2 py-1 hover:text-primary border-b-2'
+                                    >
+                                        Reported Comments
+                                    </NavLink>
+
+                                    <NavLink
+                                        to='/all-payments'
+                                        onClick={() => setMenuOpen(false)}
+                                        className='block px-2 py-1 hover:text-primary border-b-2'
+                                    >
+                                        All Payments
+                                    </NavLink>
+                                </>}
+
                             <NavLink
-                                to='/add-event'
+                                to='/notifications'
                                 onClick={() => setMenuOpen(false)}
                                 className='block px-2 py-1 hover:text-primary border-b-2'
                             >
-                                Create Event
+                                Notifications
                             </NavLink>
-                            <NavLink
-                                to='/manage-events'
-                                onClick={() => setMenuOpen(false)}
-                                className='block px-2 py-1 hover:text-primary border-b-2'
-                            >
-                                Manage Events
-                            </NavLink>
-                            <NavLink
-                                to='/joined-events'
-                                onClick={() => setMenuOpen(false)}
-                                className='block px-2 py-1 hover:text-primary border-b-2'
-                            >
-                                Joined Events
-                            </NavLink>
+
                             <NavLink
                                 to='/my-profile'
                                 onClick={() => setMenuOpen(false)}

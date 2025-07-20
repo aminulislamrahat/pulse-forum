@@ -119,6 +119,11 @@ export const Routes = createBrowserRouter([
                 path: "/notifications",
                 element: <PrivateRoute> <NotificationPage /> </PrivateRoute>
             },
+            {
+                path: "/mobile-dashboard",
+                element: <PrivateRoute> <Dashboard /> </PrivateRoute>
+            },
+
 
             {
                 path: "/edit-post/",

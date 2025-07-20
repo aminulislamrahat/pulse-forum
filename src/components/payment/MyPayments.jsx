@@ -17,8 +17,6 @@ const MyPayments = () => {
         keepPreviousData: true,
     });
 
-
-
     const payments = data?.payments || [];
     const total = data?.total || 0;
     const totalPages = Math.ceil(total / limit);
@@ -41,7 +39,7 @@ const MyPayments = () => {
     };
 
     return (
-        <div className="w-full mx-auto p-6 md:p-12  bg-base-100">
+        <div className="w-full mx-auto p-6 md:p-12 bg-base-100">
             <h2 className="text-2xl font-bold mb-4">My Payment History</h2>
             <div className="flex flex-col sm:flex-row justify-between mb-4 gap-2">
                 <input
@@ -51,10 +49,11 @@ const MyPayments = () => {
                     onChange={e => { setSearch(e.target.value); setPage(1); }}
                     className="input input-bordered max-w-xs"
                 />
-
             </div>
             {(isLoading || isFetching) && <LoadingSpinner size="sm" />}
-            <div className="overflow-x-auto">
+
+            {/* Desktop Table */}
+            <div className="hidden md:block overflow-x-auto">
                 <table className="table w-full">
                     <thead>
                         <tr className="text-center">
@@ -82,6 +81,40 @@ const MyPayments = () => {
                     </tbody>
                 </table>
             </div>
+
+            {/* Mobile: Cards */}
+            <div className="md:hidden flex flex-col gap-4">
+                {payments.length === 0 && (
+                    <div className="text-center text-gray-400">No payments found.</div>
+                )}
+                {payments.map(payment => (
+                    <div key={payment._id} className="rounded-xl bg-base-200 p-4 shadow flex flex-col gap-2">
+                        <div className="flex justify-between items-center mb-1">
+                            <div className="font-semibold">Payment ID:</div>
+                            <div className="text-xs">{payment.paymentId}</div>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span>Card last 4:</span>
+                            <span>{payment.cardLast4 || "-"}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span>Amount:</span>
+                            <span className="font-bold">${payment.amount}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span>Status:</span>
+                            <span className={`badge badge-${payment.status === "succeeded" ? "success" : "error"}`}>
+                                {payment.status}
+                            </span>
+                        </div>
+                        <div className="flex justify-between items-center text-xs text-gray-500">
+                            <span>Date:</span>
+                            <span>{moment(payment.createdAt).format("D MMM, YYYY, h:mm a")}</span>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
             {/* Pagination */}
             <div className="flex justify-center mt-6">
                 <div className="join">
