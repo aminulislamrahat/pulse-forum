@@ -55,7 +55,7 @@ export default function SearchBar({ onSearch, badgeColor }) {
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
-            <div className="flex flex-col xs:flex-row items-stretch w-full bg-white rounded-xl shadow px-2 py-2 gap-2">
+            <div className="flex flex-col lg:flex-row items-stretch w-full bg-white rounded-xl shadow px-2 py-2 gap-2">
                 <input
                     className="flex-1 text-lg bg-transparent outline-none w-full min-w-0"
                     type="text"
@@ -67,7 +67,7 @@ export default function SearchBar({ onSearch, badgeColor }) {
                     }}
                 />
                 <button
-                    className="btn btn-primary w-full xs:w-auto"
+                    className="btn btn-primary w-full lg:w-auto"
                     type="submit"
                 >
                     Search

@@ -60,7 +60,8 @@ export default function CommentsPage() {
     return (
         <div className="w-full h-screen mx-auto p-6 md:p-12  bg-base-100">
             <h2 className="text-2xl font-bold mb-6">Comments</h2>
-            <div className="overflow-x-auto">
+            {/* Desktop/tablet: Table */}
+            <div className="overflow-x-auto hidden md:block">
                 <table className="table w-full bg-base-100 rounded-xl shadow">
                     <thead>
                         <tr className="text-center">
@@ -124,6 +125,69 @@ export default function CommentsPage() {
                     </tbody>
                 </table>
             </div>
+
+            {/* Mobile: Card/List */}
+            <div className="block md:hidden space-y-4">
+                {comments?.map(comment => {
+                    const isOwnComment = comment?.email === dbUser.email;
+                    return (
+                        <div
+                            key={comment._id}
+                            className="bg-base-200 p-4 rounded-xl shadow flex flex-col gap-2"
+                        >
+                            <div className="flex items-center gap-2">
+                                <span className="font-semibold">Email:</span>
+                                <span className="font-mono text-xs break-all">{comment?.email}</span>
+                            </div>
+                            <div>
+                                <span className="font-semibold">Comment:</span>
+                                <span className="ml-1">
+                                    {comment.text.length > 20 ? (
+                                        <>
+                                            {comment.text.slice(0, 20)}...
+                                            <button
+                                                className="link text-primary text-xs ml-1"
+                                                onClick={() => handleSeeMore(comment)}
+                                            >
+                                                See more
+                                            </button>
+                                        </>
+                                    ) : comment.text}
+                                </span>
+                            </div>
+                            <div>
+                                <span className="font-semibold">Reason:</span>
+                                <select
+                                    className="select select-bordered"
+                                    value={selectedReasons[comment._id] || ""}
+                                    onChange={e => handleReasonChange(comment._id, e.target.value)}
+                                    disabled={!canReport || isOwnComment}
+                                >
+                                    <option value="" disabled>
+                                        Select Reason
+                                    </option>
+                                    {REPORT_REASONS.map(r => (
+                                        <option key={r} value={r}>{r}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <button
+                                className="btn btn-xs btn-error mt-2 self-end"
+                                disabled={
+                                    !canReport ||
+                                    !selectedReasons[comment._id] ||
+                                    loadingIds[comment._id] ||
+                                    isOwnComment
+                                }
+                                onClick={() => handleReport(comment._id)}
+                            >
+                                {loadingIds[comment._id] ? "Reporting..." : "Report"}
+                            </button>
+                        </div>
+                    );
+                })}
+            </div>
+
 
             {/* Modal for See More */}
             {expandedComment && (

@@ -162,34 +162,62 @@ export default function AnnouncementManagement() {
             {isLoading ? (
                 <span>Loading...</span>
             ) : (
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Author</th>
-                            <th>Date</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <>{/* Desktop/tablet: Table view */}
+                    <div className="overflow-x-auto hidden sm:block">
+                        <table className="table w-full">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {announcements.map(a => (
+                                    <tr key={a._id}>
+                                        <td>{a.title}</td>
+                                        <td>
+                                            <div className="flex items-center gap-2">
+                                                <img src={a.authorImage} className="w-8 h-8 rounded-full" alt="" />
+                                                <span>{a.authorName}</span>
+                                            </div>
+                                        </td>
+                                        <td>{a.createdAt ? new Date(a.createdAt).toLocaleDateString() : ""}</td>
+                                        <td>
+                                            <button className="btn btn-xs btn-info" onClick={() => setEditId(a._id)}>Edit</button>
+                                            <button className="btn btn-xs btn-error ml-2" onClick={() => handleDelete(a._id)}>Delete</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* Mobile: Card view */}
+                    <div className="sm:hidden flex flex-col gap-4">
                         {announcements.map(a => (
-                            <tr key={a._id}>
-                                <td>{a.title}</td>
-                                <td>
-                                    <div className="flex items-center gap-2">
-                                        <img src={a.authorImage} className="w-8 h-8 rounded-full" alt="" />
-                                        <span>{a.authorName}</span>
+                            <div key={a._id} className="bg-base-200 rounded-xl p-4 shadow flex flex-col gap-2">
+                                <div className="flex flex-row justify-between items-center">
+                                    <div className="flex flex-col gap-2"> <div className="font-bold text-lg">{a.title}</div>
+                                        <div className="flex items-center gap-2">
+                                            <img src={a.authorImage} className="w-8 h-8 rounded-full" alt="" />
+                                            <span>{a.authorName}</span>
+                                        </div>
+                                        <div className="text-gray-500 text-sm">
+                                            created Date : {a.createdAt ? new Date(a.createdAt).toLocaleDateString() : ""}
+                                        </div>
                                     </div>
-                                </td>
-                                <td>{a.createdAt ? new Date(a.createdAt).toLocaleDateString() : ""}</td>
-                                <td>
-                                    <button className="btn btn-xs btn-info" onClick={() => { setEditId(a._id); }}>Edit</button>
-                                    <button className="btn btn-xs btn-error ml-2" onClick={() => handleDelete(a._id)}>Delete</button>
-                                </td>
-                            </tr>
+                                    <div className="flex gap-2 mt-2">
+                                        <button className="btn btn-xs btn-info" onClick={() => setEditId(a._id)}>Edit</button>
+                                        <button className="btn btn-xs btn-error" onClick={() => handleDelete(a._id)}>Delete</button>
+                                    </div> </div>
+
+
+                            </div>
                         ))}
-                    </tbody>
-                </table>
+                    </div>
+                </>
             )}
         </div>
     );

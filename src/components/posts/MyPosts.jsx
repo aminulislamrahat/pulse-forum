@@ -65,9 +65,8 @@ export default function MyPosts() {
     if (isLoading) return <LoadingSpinner />;
 
     return (
-        <div className="w-full h-screen mx-auto p-6 md:p-12  bg-base-100">
+        <div className="w-full mx-auto p-4 md:p-12 bg-base-100 min-h-[60vh]">
             <h2 className="text-2xl font-bold mb-4">My Posts</h2>
-
             {/* Search bar */}
             <form className="mb-4 flex gap-2" onSubmit={handleSubmit(onSearch)}>
                 <input
@@ -79,8 +78,8 @@ export default function MyPosts() {
                 <button className="btn btn-primary" type="submit">Search</button>
             </form>
 
-            {/* Posts Table */}
-            <div className="overflow-x-auto bg-white rounded-xl shadow-md">
+            {/* --- Desktop/tablet table --- */}
+            <div className="hidden sm:block overflow-x-auto bg-white rounded-xl shadow-md">
                 <table className="table table-zebra">
                     <thead>
                         <tr className="text-center">
@@ -100,10 +99,9 @@ export default function MyPosts() {
                             posts.map((post) => (
                                 <tr key={post._id} className="text-center">
                                     <td className="max-w-[200px] truncate">{post.title}</td>
-                                    <td className="text-center font-bold">{(post.upvotes || 0) - (post.downvotes || 0)}</td>
-                                    <td className="text-center">{post.commentCount || 0}</td>
-                                    <td className="text-center">
-                                        {/* Stylish toggle */}
+                                    <td className="font-bold">{(post.upvotes || 0) - (post.downvotes || 0)}</td>
+                                    <td>{post.commentCount || 0}</td>
+                                    <td>
                                         <label className="swap swap-flip text-xl border-2 rounded-4xl">
                                             <input
                                                 type="checkbox"
@@ -111,8 +109,6 @@ export default function MyPosts() {
                                                 onChange={() => handleVisibility(post._id, post.public)}
                                                 className="toggle toggle-primary"
                                             />
-                                            {/* <span className="swap-on text-green-600 font-bold">Public</span>
-                                            <span className="swap-off text-gray-500 font-bold">Private</span> */}
                                         </label>
                                     </td>
                                     <td className="flex justify-center gap-2">
@@ -151,6 +147,68 @@ export default function MyPosts() {
                         )}
                     </tbody>
                 </table>
+            </div>
+
+            {/* --- Mobile cards --- */}
+            <div className="sm:hidden grid gap-4">
+                {posts.length === 0 ? (
+                    <div className="text-center text-gray-400">No posts found.</div>
+                ) : (
+                    posts.map((post) => (
+                        <div
+                            key={post._id}
+                            className="bg-white rounded-xl shadow-md p-4 flex flex-col gap-2"
+                        >
+                            <div className="font-bold text-lg">{post.title}</div>
+                            <div className="flex gap-4 text-sm text-gray-600">
+                                <span>Votes: <span className="font-bold">{(post.upvotes || 0) - (post.downvotes || 0)}</span></span>
+                                <span>Comments: {post.commentCount || 0}</span>
+                            </div>
+                            <div className="flex gap-3 items-center">
+                                <span className="font-semibold">Visibility:</span>
+                                <label className="swap swap-flip text-xl border-2 rounded-4xl">
+                                    <input
+                                        type="checkbox"
+                                        checked={post.public}
+                                        onChange={() => handleVisibility(post._id, post.public)}
+                                        className="toggle toggle-primary"
+                                    />
+                                </label>
+                            </div>
+                            <div className="flex gap-3 mt-2">
+                                <button
+                                    className="btn btn-xs btn-ghost"
+                                    title="Comment"
+                                    onClick={() =>
+                                        isDashboard
+                                            ? navigate(`/dashboard/posts/comments/${post._id}`)
+                                            : navigate(`/posts/comments/${post._id}`)
+                                    }
+                                >
+                                    <FaRegCommentDots />
+                                </button>
+                                <button
+                                    className="btn btn-xs btn-ghost"
+                                    title="Edit"
+                                    onClick={() =>
+                                        isDashboard
+                                            ? navigate(`/dashboard/edit-post/${post._id}`)
+                                            : navigate(`/edit-post/${post._id}`)
+                                    }
+                                >
+                                    <FaEdit />
+                                </button>
+                                <button
+                                    className="btn btn-xs btn-ghost text-error"
+                                    title="Delete"
+                                    onClick={() => handleDelete(post._id)}
+                                >
+                                    <FaTrash />
+                                </button>
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
 
             {/* Pagination */}
