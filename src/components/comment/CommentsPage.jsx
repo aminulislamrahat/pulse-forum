@@ -33,7 +33,6 @@ export default function CommentsPage() {
     if (isLoading || !dbUser) return <LoadingSpinner />;
     const post = postData?.post;
     const comments = postData?.postComments || [];
-    // console.log("post data", comments)
     // Only post owner can report
     const canReport = dbUser?.email === post?.authorEmail;
 
@@ -72,12 +71,89 @@ export default function CommentsPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {comments?.map(comment => {
-                            const isOwnComment = comment?.email === dbUser.email;
-                            return (
-                                <tr key={comment._id} className="text-center">
-                                    <td className="font-mono text-xs">{comment?.email}</td>
-                                    <td>
+                        {comments.length === 0 ? (
+                            <tr>
+                                <td colSpan={4} className="text-center text-gray-400 py-8 text-lg">
+                                    No comments found for this post.
+                                </td>
+                            </tr>
+                        ) : (
+                            comments.map(comment => {
+                                const isOwnComment = comment?.email === dbUser.email;
+                                return (
+                                    <tr key={comment._id} className="text-center">
+                                        <td className="font-mono text-xs">{comment?.email}</td>
+                                        <td>
+                                            {comment.text.length > 20 ? (
+                                                <>
+                                                    {comment.text.slice(0, 20)}...
+                                                    <button
+                                                        className="link text-primary text-xs ml-1"
+                                                        onClick={() => handleSeeMore(comment)}
+                                                    >
+                                                        See more
+                                                    </button>
+                                                </>
+                                            ) : comment.text}
+                                        </td>
+                                        <td>
+                                            <select
+                                                className="select select-bordered"
+                                                value={selectedReasons[comment._id] || ""}
+                                                onChange={e => handleReasonChange(comment._id, e.target.value)}
+                                                disabled={!canReport || isOwnComment}
+                                            >
+                                                <option value="" disabled>
+                                                    Select Reason
+                                                </option>
+                                                {REPORT_REASONS.map(r => (
+                                                    <option key={r} value={r}>{r}</option>
+                                                ))}
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <button
+                                                className="btn btn-xs btn-error"
+                                                disabled={
+                                                    !canReport ||
+                                                    !selectedReasons[comment._id] ||
+                                                    loadingIds[comment._id] ||
+                                                    isOwnComment
+                                                }
+                                                onClick={() => handleReport(comment._id)}
+                                            >
+                                                {loadingIds[comment._id] ? "Reporting..." : "Report"}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Mobile: Card/List */}
+            <div className="block md:hidden space-y-4">
+                {comments.length === 0 ? (
+                    <div className="text-center text-gray-400 py-8 text-lg bg-base-200 rounded-xl">
+                        No comments found for this post.
+                    </div>
+                ) : (
+                    comments.map(comment => {
+                        const isOwnComment = comment?.email === dbUser.email;
+                        return (
+                            <div
+                                key={comment._id}
+                                className="bg-base-200 p-4 rounded-xl shadow flex flex-col gap-2"
+                            >
+                                <div className="flex items-center gap-2">
+                                    <span className="font-semibold">Email:</span>
+                                    <span className="font-mono text-xs break-all">{comment?.email}</span>
+                                </div>
+                                <div>
+                                    <span className="font-semibold">Comment:</span>
+                                    <span className="ml-1">
                                         {comment.text.length > 20 ? (
                                             <>
                                                 {comment.text.slice(0, 20)}...
@@ -89,105 +165,41 @@ export default function CommentsPage() {
                                                 </button>
                                             </>
                                         ) : comment.text}
-                                    </td>
-                                    <td>
-                                        <select
-                                            className="select select-bordered"
-                                            value={selectedReasons[comment._id] || ""}
-                                            onChange={e => handleReasonChange(comment._id, e.target.value)}
-                                            disabled={!canReport || isOwnComment}
-                                        >
-                                            <option value="" disabled>
-                                                Select Reason
-                                            </option>
-                                            {REPORT_REASONS.map(r => (
-                                                <option key={r} value={r}>{r}</option>
-                                            ))}
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <button
-                                            className="btn btn-xs btn-error"
-                                            disabled={
-                                                !canReport ||
-                                                !selectedReasons[comment._id] ||
-                                                loadingIds[comment._id] ||
-                                                isOwnComment
-                                            }
-                                            onClick={() => handleReport(comment._id)}
-                                        >
-                                            {loadingIds[comment._id] ? "Reporting..." : "Report"}
-                                        </button>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
-            </div>
-
-            {/* Mobile: Card/List */}
-            <div className="block md:hidden space-y-4">
-                {comments?.map(comment => {
-                    const isOwnComment = comment?.email === dbUser.email;
-                    return (
-                        <div
-                            key={comment._id}
-                            className="bg-base-200 p-4 rounded-xl shadow flex flex-col gap-2"
-                        >
-                            <div className="flex items-center gap-2">
-                                <span className="font-semibold">Email:</span>
-                                <span className="font-mono text-xs break-all">{comment?.email}</span>
-                            </div>
-                            <div>
-                                <span className="font-semibold">Comment:</span>
-                                <span className="ml-1">
-                                    {comment.text.length > 20 ? (
-                                        <>
-                                            {comment.text.slice(0, 20)}...
-                                            <button
-                                                className="link text-primary text-xs ml-1"
-                                                onClick={() => handleSeeMore(comment)}
-                                            >
-                                                See more
-                                            </button>
-                                        </>
-                                    ) : comment.text}
-                                </span>
-                            </div>
-                            <div>
-                                <span className="font-semibold">Reason:</span>
-                                <select
-                                    className="select select-bordered"
-                                    value={selectedReasons[comment._id] || ""}
-                                    onChange={e => handleReasonChange(comment._id, e.target.value)}
-                                    disabled={!canReport || isOwnComment}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="font-semibold">Reason:</span>
+                                    <select
+                                        className="select select-bordered"
+                                        value={selectedReasons[comment._id] || ""}
+                                        onChange={e => handleReasonChange(comment._id, e.target.value)}
+                                        disabled={!canReport || isOwnComment}
+                                    >
+                                        <option value="" disabled>
+                                            Select Reason
+                                        </option>
+                                        {REPORT_REASONS.map(r => (
+                                            <option key={r} value={r}>{r}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <button
+                                    className="btn btn-xs btn-error mt-2 self-end"
+                                    disabled={
+                                        !canReport ||
+                                        !selectedReasons[comment._id] ||
+                                        loadingIds[comment._id] ||
+                                        isOwnComment
+                                    }
+                                    onClick={() => handleReport(comment._id)}
                                 >
-                                    <option value="" disabled>
-                                        Select Reason
-                                    </option>
-                                    {REPORT_REASONS.map(r => (
-                                        <option key={r} value={r}>{r}</option>
-                                    ))}
-                                </select>
+                                    {loadingIds[comment._id] ? "Reporting..." : "Report"}
+                                </button>
                             </div>
-                            <button
-                                className="btn btn-xs btn-error mt-2 self-end"
-                                disabled={
-                                    !canReport ||
-                                    !selectedReasons[comment._id] ||
-                                    loadingIds[comment._id] ||
-                                    isOwnComment
-                                }
-                                onClick={() => handleReport(comment._id)}
-                            >
-                                {loadingIds[comment._id] ? "Reporting..." : "Report"}
-                            </button>
-                        </div>
-                    );
-                })}
+                        );
+                    })
+                )}
             </div>
-
 
             {/* Modal for See More */}
             {expandedComment && (

@@ -197,13 +197,7 @@ export default function Navbar() {
                                 >
                                     Dashboard
                                 </NavLink>
-                                <NavLink
-                                    to='/membership'
-                                    onClick={() => setMenuOpen(false)}
-                                    className='block px-2 py-1 hover:text-primary border-b-2'
-                                >
-                                    Membership
-                                </NavLink>
+
                                 <NavLink
                                     to='/payments'
                                     onClick={() => setMenuOpen(false)}

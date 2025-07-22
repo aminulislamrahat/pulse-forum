@@ -68,7 +68,7 @@ export default function AddPost() {
     // Show upgrade if bronze and over limit
     if (reachedLimit) {
         return (
-            <div className="flex flex-col items-center justify-center py-10">
+            <div className="flex h-screen flex-col items-center justify-center py-10">
                 <h2 className="text-2xl font-bold mb-2 text-center">Post Limit Reached</h2>
                 <p className="mb-4 text-center">
                     As a Bronze member, you can only create {postLimit} posts.<br />

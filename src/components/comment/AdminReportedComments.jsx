@@ -38,7 +38,7 @@ export default function AdminReportedComments() {
                 <LoadingSpinner />
             ) : (
                 <div className="overflow-x-auto bg-base-200 rounded-xl shadow">
-                    <table className="table table-zebra w-full">
+                    <table className="table table-zebra w-full rounded-xl shadow bg-white">
                         <thead>
                             <tr>
                                 <th>Comment</th>
@@ -109,18 +109,21 @@ export default function AdminReportedComments() {
                                         <td className="hidden md:table-cell">{comment.reportInfo?.reportedBy}</td>
                                         <td className="hidden md:table-cell">{comment.reportInfo?.reason}</td>
                                         <td>
-                                            <button
-                                                className="btn btn-xs btn-info mr-2"
-                                                onClick={() => navigate(`/posts/${comment.postId}`)}
-                                            >
-                                                View
-                                            </button>
-                                            <button
-                                                className="btn btn-xs btn-error"
-                                                onClick={() => handleDelete(comment._id)}
-                                            >
-                                                Delete
-                                            </button>
+                                            <div className="flex flex-col lg:flex-row gap-2 justify-center items-center">
+                                                <button
+                                                    className="btn btn-xs btn-info mr-2"
+                                                    onClick={() => navigate(`/posts/${comment.postId}`)}
+                                                >
+                                                    View
+                                                </button>
+                                                <button
+                                                    className="btn btn-xs btn-error"
+                                                    onClick={() => handleDelete(comment._id)}
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
+
                                         </td>
                                     </tr>
                                 ))

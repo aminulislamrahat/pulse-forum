@@ -9,7 +9,7 @@ const UserRoute = ({ children }) => {
     const location = useLocation();
     // console.log(location);
 
-    if (loading) {
+    if (loading || !dbUser || !dbUser.email) {
         return <LoadingSpinner />;
     }
 

@@ -87,7 +87,7 @@ const TagManagement = () => {
                         type="text"
                         placeholder="Enter tag name (e.g. Science)"
                         {...register("name", { required: true })}
-                        className="input input-bordered w-full flex-1 text-base"
+                        className="input input-bordered w-full"
                         maxLength={20}
                         autoComplete="off"
                     />

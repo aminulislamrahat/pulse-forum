@@ -44,7 +44,7 @@ export default function AdminManagePosts() {
             <h2 className="text-2xl font-bold mb-6 text-center">Manage Posts</h2>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <input
-                    className="input input-bordered flex-1"
+                    className="input input-bordered w-full"
                     placeholder="Search by title, tag, or author..."
                     value={search}
                     onChange={e => { setSearch(e.target.value); setPage(1); }}
@@ -57,7 +57,7 @@ export default function AdminManagePosts() {
                 <LoadingSpinner />
             ) : (
                 <div className="overflow-x-auto bg-base-200 rounded-xl shadow">
-                    <table className="table table-zebra w-full">
+                    <table className="table table-zebra w-full rounded-xl shadow bg-white">
                         <thead>
                             <tr>
                                 <th>Title</th>
@@ -103,19 +103,22 @@ export default function AdminManagePosts() {
                                         <td className="hidden md:table-cell">{post.authorName}</td>
                                         <td className="hidden md:table-cell">{post.authorEmail}</td>
                                         <td>
-                                            <button
-                                                className="btn btn-xs btn-info mr-2"
-                                                onClick={() => navigate(`/posts/${post._id}`)}
-                                                title="View post"
-                                            >
-                                                View
-                                            </button>
-                                            <button
-                                                className="btn btn-xs btn-error"
-                                                onClick={() => handleDelete(post._id)}
-                                            >
-                                                Delete
-                                            </button>
+                                            <div className="flex flex-col lg:flex-row gap-2 justify-center items-center">
+                                                <button
+                                                    className="btn btn-xs btn-info mr-2"
+                                                    onClick={() => navigate(`/posts/${post._id}`)}
+                                                    title="View post"
+                                                >
+                                                    View
+                                                </button>
+                                                <button
+                                                    className="btn btn-xs btn-error"
+                                                    onClick={() => handleDelete(post._id)}
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
+
                                         </td>
                                     </tr>
                                 ))
