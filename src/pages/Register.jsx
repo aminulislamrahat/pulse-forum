@@ -166,7 +166,9 @@ export const Register = () => {
                     </div>
                 </div>
                 <div className="space-y-2">
-                    <button type="submit" className="btn btn-primary w-full hover:scale-105" disabled={!isValid || uploading || loading}>
+                    <button type="submit" className="btn btn-primary w-full hover:scale-105"
+                    // disabled={!isValid || uploading || loading}
+                    >
                         Register
                     </button>
                     <p className="text-center text-sm">
