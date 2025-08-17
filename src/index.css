@@ -37,7 +37,7 @@
   }
 }
 @plugin "daisyui" {
-  themes: all;
+  themes: winter --default, dark --prefersdark, retro, dracula, valentine, aqua, dim, luxury, light;
   root: ":root";
   include: ;
   exclude: ;
