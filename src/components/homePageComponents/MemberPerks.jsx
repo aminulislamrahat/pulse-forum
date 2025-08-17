@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router";
 
 export default function MemberPerks() {
   const perks = [
@@ -17,7 +18,7 @@ export default function MemberPerks() {
 
         <div className="grid gap-6 md:grid-cols-2">
           {/* Bronze */}
-          <div className="bg-base-100 rounded-xl shadow p-6">
+          <div className="bg-base-100 rounded-xl shadow p-10">
             <div className="flex items-center justify-between">
               <h3 className="text-2xl font-bold">Bronze</h3>
               <span className="badge badge-outline">Free</span>
@@ -33,7 +34,7 @@ export default function MemberPerks() {
           </div>
 
           {/* Gold */}
-          <div className="bg-base-100 rounded-xl shadow p-6 ring-2 ring-warning">
+          <div className="bg-base-100 rounded-xl shadow p-10 ring-2 ring-warning">
             <div className="flex items-center justify-between">
               <h3 className="text-2xl font-bold">Gold</h3>
               <span className="badge badge-warning text-black">Popular</span>
@@ -47,9 +48,9 @@ export default function MemberPerks() {
               ))}
             </ul>
             <div className="mt-5">
-              <button className="btn btn-primary w-full">
+              <Link to="/membership" className="btn btn-primary w-full">
                 Upgrade to Gold
-              </button>
+              </Link>
             </div>
           </div>
         </div>

@@ -27,7 +27,7 @@ export default function HowItWorks() {
               desc: "Get upvotes, unlock badges, and level up to Gold.",
             },
           ].map((c, i) => (
-            <div key={i} className="bg-base-100 rounded-xl p-6 shadow">
+            <div key={i} className="bg-base-100 rounded-xl p-10 shadow">
               <div className="flex items-center gap-3 mb-2">
                 <div className="bg-base-300 p-3 rounded-2xl">{c.icon}</div>
                 <h3 className="text-xl font-bold">{c.title}</h3>

@@ -5,6 +5,8 @@ import TagListSection from "../components/homePageComponents/TagListSection";
 import AnnouncementSlider from "../components/homePageComponents/AnnouncementSlider";
 import HowItWorks from "../components/homePageComponents/HowItWorks";
 import CommunityHighlights from "../components/homePageComponents/CommunityHighlights";
+import MemberPerks from "../components/homePageComponents/MemberPerks";
+import CommunityGuidelines from "../components/homePageComponents/CommunityGuidelines";
 
 export const Home = () => {
   const postsSectionRef = useRef();
@@ -29,6 +31,8 @@ export const Home = () => {
 
       <HowItWorks />
       <CommunityHighlights />
+      <MemberPerks />
+      <CommunityGuidelines />
     </>
   );
 };

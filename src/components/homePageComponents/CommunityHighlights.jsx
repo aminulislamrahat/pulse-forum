@@ -34,7 +34,7 @@ export default function CommunityHighlights() {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {items.map((it, i) => (
-            <div key={i} className="bg-base-100 rounded-xl p-6 shadow">
+            <div key={i} className="bg-base-100 rounded-xl p-10 shadow">
               <div className="flex items-center gap-3 mb-2">
                 {it.icon}
                 <h3 className="text-lg font-bold">{it.title}</h3>
