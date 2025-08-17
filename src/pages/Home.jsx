@@ -4,6 +4,7 @@ import PostsSection from "../components/homePageComponents/PostsSection";
 import TagListSection from "../components/homePageComponents/TagListSection";
 import AnnouncementSlider from "../components/homePageComponents/AnnouncementSlider";
 import HowItWorks from "../components/homePageComponents/HowItWorks";
+import CommunityHighlights from "../components/homePageComponents/CommunityHighlights";
 
 export const Home = () => {
   const postsSectionRef = useRef();
@@ -27,6 +28,7 @@ export const Home = () => {
       </div>
 
       <HowItWorks />
+      <CommunityHighlights />
     </>
   );
 };
